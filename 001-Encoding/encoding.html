@@ -1,14 +1,117 @@
 <html>
 <head>
 <title>This is not a character: The treachery of byte sequences</title>
+<link rel="stylesheet" type="text/cas" href="../style/article.css"/>
 </head>
 <body>
 
-<p>Welcome to my tech talk.  This is actually the first in a series, called</p>
+<p>Welcome to my tech talk.  I actually plan for this to be the first in a series.  The series is called:</p>
+
+<hr />
 
 <h1>Be Explicit</h1>
 
+<p>And has the subtitle:</p>
+
+<hr />
+
 <h3>English is full of ambiguities.  Your programs should not be.</h3>
+
+<p>To get started, I will use an example:</p>
+
+<hr />
+
+<blockquote class="signquot">
+<img src="../images/MagrittePipe.jpg" style="width:90%" alt="This is not a pipe"/>
+</blockquote>
+
+<p>Actually that text isn't English; it's French.  It says "This is not a pipe".</p>
+
+<p>(Question to audience) Who knows why this is paradoxical?</p>
+
+<p>(Question to audience) Who knows why it's <em>not</em> paradoxical?</p>
+
+<p>If you take 'this' to mean the object depicted in the picture, then the text would be wrong, since that thing obviously <em>is</em> a pipe.  So either the artist is lying, or was using 'this' to refer to something else.  I think what he meant is that the picture <em>itself</em> is not a pipe.  To clarify things, he could have written something like:</p>
+
+<hr />
+
+<blockquote class="signquot">
+<img src="../images/MagrittePipeClarified.jpg" style="width:90%" alt="The object depicted in this picture is a pipe.  The picture itself is <em>not</em> a pipe."/>
+</blockquote>
+
+<p>But art works are more fun when they're full of ambiguities.  Ambiguities also form the foundation of many intro to philosophy courses.  But they're not usually useful when you're making engineering decisions.  So, given that, I'm going to spend this talk prattling on about  how the world will make more sense and your programs will be more 'robust' if you make sure to define what exactly it is you're talking about.</p>
+
+<!--
+<p>Assuming I actually do get around to doing more of these, it's going to be kind of like the ISP class they had me take in high school.  That class was about a lot of different things but it all tied back into the idea that energy is always conserved, and that you could use that fact to help solve lots of different equations.  Similarly, I hope to touch on several topics that I think are interesting and/or useful, but always emphasizing that main idea.</p>
+
+<p>TODO: Cut this down by 2/3rds so people don't fall asleep and/or leave.</p>
+-->
+
+<p>Now on to today's sub-topic.</p>
+
+<hr />
+
+<h2>This is not a character</h2>
+
+<p>Even the sub-topic has a subtitle:</p>
+
+<hr />
+
+<h3>The treachery of byte sequences</h3>
+
+<p>This is going to be about character encoding.</p>
+
+<p>Regarding paying proper attention to character encodings, a wise man once said</p>
+
+<hr />
+
+<blockquote class="signquot">IT'S NOT THAT HARD</blockquote>
+
+<p>Joel has a really <a href="http://www.joelonsoftware.com/articles/Unicode.html">nice article</a> about things like ASCII, Unicode, and UTF-8, but I'm going to go at this from more of a '<i>just be sure to keep track of how your strings are encoded and everything will work out fine</i>' perspective, skipping over most technical details of any given encoding.</p>
+
+<hr />
+
+<p>(Question to audience) What's this?</p>
+
+<p class="signquot">&#35987;</p>
+
+<p>Actually, to be precise, I need to clarify what I mean by 'this'.  I don't mean the pixels on the screen, I don't mean the wall.  I mean what do these lines and squiggles represent?</p>
+
+<p>The short answer is that it's the traditional chinese character for 'cat'.  It's not a number, it's not really a picture (though it is depicted by one), and it's certainly not an actual cat.  Like the letter 'A', it is a mathematical object that happens to have a commonly recognised representation and a commonly understood meaning.  That bunch of lines projected on the wall is just a way of communicating it to you.</p>
+
+<p>(Question to audience) So how does a computer represent such a thing?</p>
+
+<p>That's kind of a trick question.  A computer could represent it lots of ways.  It could store a that bunch of lines as a bitmap, or it could store a recording of someone saying the word.  But to make things easy, computers usually represent these things as numbers.  At least until it's time to show them to a human.  Then they turn them into bitmaps and send them to a display device or something.  But that's not what I want to talk about today.</p>
+
+<p>The next point is, what the heck is the number for &#35987;?</p>
+
+<p>Well fortunately for us programmers there's this thing called</p>
+
+<hr />
+
+<p class="signquot">Unicode</p>
+
+<p>Unicode makes deciding what number to use for any given character easy,</p>
+
+<hr />
+
+<p>because it explicitly defines which number goes with each character.  That's all Unicode is.</p>
+
+<center><table class="signquot">
+<tr><th>Character</th><th>Number</th></tr>
+<tr><td>A</td><td>65</td>
+<tr><td>a</td><td>97</td>
+<tr><td>&lt;</td><td>60</td>
+<tr><td>&#35987;</td><td>35987</td>
+</table></center>
+
+<p>I can say "character" here instead of "pictoral representation of character", because this entire document truly is made up of characters, along with some formatting information.  What you're seeing on the wall here is not the document itself, but a picture of a section of the document (or a section of a picture of it).  But that's getting outside the scope of today's topic.</p>
+
+<p>(Question to audience) Any questions so far?</p>
+
+<p>The next question we need to ask ourselves is: how does the computer represent those numbers?  Keep in mind that the numbers for most characters won't fit in 8 bits, and that sometimes you need certain characters to mean special things, like angle brackets in HTML.  So this problem is a tad more complicated.</p>
+
+<p>Fortunately, you can still keep things easy for yourself simply by being aware of what encoding any given string of characters is in!</p>
 
 </body>
 </html>
