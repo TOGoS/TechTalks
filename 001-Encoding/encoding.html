@@ -77,13 +77,13 @@
 
 <p>Actually, to be precise, I need to clarify what I mean by 'this'.  I don't mean the pixels on the screen, I don't mean the wall.  I mean what do these lines and squiggles represent?</p>
 
-<p>The short answer is that it's the traditional chinese character for 'cat'.  It's not a number, it's not really a picture (though it is depicted by one), and it's certainly not an actual cat.  Like the letter 'A', it is a mathematical object that happens to have a commonly recognised representation and a commonly understood meaning.  That bunch of lines projected on the wall is just a way of communicating it to you.</p>
+<p>The short answer is that it's the traditional chinese character for 'cat'.  It's not a number, it's not really a picture (though it is depicted by one), and it's certainly not an actual cat.  Like the letter 'A', it's an abstract object that happens to have a commonly recognised representation and a commonly understood meaning.  That bunch of lines projected on the wall is just a way of communicating it to you.</p>
 
 <p>(Question to audience) So how does a computer represent such a thing?</p>
 
-<p>That's kind of a trick question.  A computer could represent it lots of ways.  It could store a that bunch of lines as a bitmap, or it could store a recording of someone saying the word.  But to make things easy, computers usually represent these things as numbers.  At least until it's time to show them to a human.  Then they turn them into bitmaps and send them to a display device or something.  But that's not what I want to talk about today.</p>
+<p>That's kind of a trick question.  A computer could represent it lots of ways.  It could store a that bunch of lines as a bitmap, or it could store a recording of someone saying the word.  But to make things easy, computers usually represent these things as numbers.  At least until it's time to show them to a human.  Then they turn them into bitmaps and send them to a display device or something.  But right now I want to talk about numbers.</p>
 
-<p>The next point is, what the heck is the number for &#35987;?</p>
+<p>The next point being: what's the number for &#35987;?</p>
 
 <p>Well fortunately for us programmers there's this thing called</p>
 
@@ -91,11 +91,11 @@
 
 <p class="signquot">Unicode</p>
 
-<p>Unicode makes deciding what number to use for any given character easy,</p>
+<p>Unicode makes deciding what number to use for any given character easy, because it explicitly defines which number goes with each character.  That's all Unicode is.  A standard, widely-used, character number map.  In character set terminology, each of these numbers is called "a code point", by the way.</p>
 
 <hr />
 
-<p>because it explicitly defines which number goes with each character.  That's all Unicode is.</p>
+<p>Here're a few Uni-code points:</p>
 
 <center><table class="signquot">
 <tr><th>Character</th><th>Number</th></tr>
@@ -105,13 +105,86 @@
 <tr><td>&#35987;</td><td>35987</td>
 </table></center>
 
-<p>I can say "character" here instead of "pictoral representation of character", because this entire document truly is made up of characters, along with some formatting information.  What you're seeing on the wall here is not the document itself, but a picture of a section of the document (or a section of a picture of it).  But that's getting outside the scope of today's topic.</p>
+<p>I can say "character" here instead of "pictoral representation of character", because this entire document truly is made up of characters, along with some formatting information.  What you're seeing on the wall here is not the document itself, but a picture of a section of the document (or a section of a picture of it).  But I'll talk more about that distinction another time.</p>
 
 <p>(Question to audience) Any questions so far?</p>
 
 <p>The next question we need to ask ourselves is: how does the computer represent those numbers?  Keep in mind that the numbers for most characters won't fit in 8 bits, and that sometimes you need certain characters to mean special things, like angle brackets in HTML.  So this problem is a tad more complicated.</p>
 
-<p>Fortunately, you can still keep things easy for yourself simply by being aware of what encoding any given string of characters is in!</p>
+<p>Fortunately, you can still keep things easy for yourself simply by being aware of how the characters you are working with are encoded!  The method by which code points are translated to and from sequences of bits or bytes called a "character encoding"</p>
+
+<hr />
+
+<p>Here are some examples of character encodings that you may be familar with:</p>
+
+<ul class="signquot" style="text-align:left">
+<li>ASCII: fits in 7 bits or you can't say it</li>
+<li>Multibyte: reserve several bytes for each character</li>
+<li>JSON String: <code>"cat = \u8C93"</code></li>
+<li>X/HTML-entity-encoded: <code>cat = &amp;#35987;</code></li>
+<li>UTF-8: Superset of ASCII using upper bits to indicate multi-byte characters</li>
+</ul>
+
+<!--
+<p>I thought of adding URL-encoding to the list, but decided it wasn't much of a character encoding because URL escape sequences are used to encode bytes, which in turn need to be interpreted either as ASCII or UTF-8.</p>
+-->
+
+<p>Any one of these methods may be used to encode a string of characters.  And as long as you know how your string is encoded, you can get it back out by decoding using the same method.</p>
+
+<hr />
+
+<p>You can even encode things multiple times so long as you are sure to decode using the same methods in reverse order.</p>
+
+<p style="color:red">TODO: This sucks.
+This talk is really about reversible transformations more than character encodings,
+especially since you get into X/HTML entities, which aren't really 'character encodings' at all.
+Reword/rewrite to reflect this.</p>
+
+<div class="signquot" style="text-align:left">
+xmlencode(&#35987;) = &amp;#35987;<br />
+xmlencode(xmlencode(&#35987;)) = &amp;#35987;<br />
+jsonencode(&#35987;) = "\u8C93"<br />
+jsonencode(xmlencode(&#35987;)) = "&amp;#35987;"<br />
+xmlencode(jsonencode(&#35987;)) = "\u8C93"
+</div>
+
+<p>And you don't have to be the one doing the decoding, either.  If you tell a web browser that you are sending it an HTML document, then send it xmlencode(&#35987;), it will show up on the users screen as &#35987;, because the web browser is doing the decoding.</p>
+
+<hr />
+
+<p class="signquot">&#35987;</p>
+
+</p>On the other hand, if you xmlencode it twice, then the web browser will show something this:</p>
+
+<hr />
+
+<p class="signquot">&amp;#35987;</p>
+
+<p>Which might be usful if you're writing an article about character encodings.</p>
+
+<hr />
+
+<p>But otherwise you don't even need to X/HTML-entity-encode this particular character, as it has no special meaning to X/HTML.  But in this case you and the browser do need to agree on a byte-character encoding.  The easiest way to do this is to send out a header declaring the content type to be:</p>
+
+<p class="signquot">text/html; charset=utf-8</p>
+
+<p>and then making sure that all the strings you are outputting really are UTF-8.</p>
+
+<p>This indicates that the stream of bytes the browser recieves should be transformed to a sequence of characters using UTF-8, and then that sequence of characters should be parsed as HTML.</p>
+
+<p>That there are 2 levels of encodings here (one from bytes to characters, and another from characters to formatting+characters) is probably what gets people confused, especially since you can choose whether to encode non-ASCII characters at the HTML-level or not.</p>
+
+<p>(Question to audience) Any questions now?</p>
+
+<p>Now, if for some reason you can't specify the charset header (say, because the website is already written to output using a different charset), then you should X/HTML-entity-encode any non-ASCII characters.  This is actually the route we've taken to work with text on Schweser.  Anything that's not ASCII text we encode using HTML entities, but that means we need to keep track of what those fields are and be sure to treat them as being HTML-entity-encoded.  Otherwise the users will see a bunch of ampersands in their text.</p>
+
+<hr />
+
+<h3>PHP functions</h3>
+
+<p>As far as I can tell, neither of the 2 built-in PHP functions, htmlentities or htmlspecialchars, will entity-encode all non-ASCII characters.  This means that if you are using them to encode data to be sent to a browser, non-ASCII byte characters will slip right past, and you are relying on the character set/encoding named in the header matching that of the string you're outputting.  If we could entity-encode <em>all</em> non-ASCII characters, then the resulting HTML will be pure ASCII, and since that is a subset of both ISO-8859-1 and UTF-8 (probably the 2 character encodings most likely to be default), we can stop worrying about backing character encodings, as long as we can rely on the client properly handling X/HTML entities.</p>
+
+<p>Therefore I have written this function...</p>
 
 </body>
 </html>
