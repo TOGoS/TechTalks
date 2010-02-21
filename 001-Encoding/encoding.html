@@ -83,7 +83,7 @@
 
 <p>Actually, I need to clarify what I mean by 'this'.  I don't mean the pixels on the screen, I don't mean the wall.  What I mean is: what do these lines and squiggles represent?</p>
 
-<p>The short answer is that it's the traditional chinese character for 'cat'.  It's not a number, it's not a specific picture (though it is depicted by one), and it's certainly not an actual cat.  Like the letter 'A', it's an abstract object that happens to have a commonly recognised representation and a commonly understood meaning.  That bunch of lines projected on the wall is just a way of communicating it to you.</p>
+<p>The short answer is that it's the traditional chinese character for 'cat'.  It's not a number, it's not a specific picture (since you could draw it many different ways and people would still recognise it as the same character), and it's certainly not an actual cat.  Like the letter 'A', it's an abstract object that happens to have a commonly recognised representation and a commonly understood meaning.  That bunch of lines projected on the wall is just a way of communicating it to you.</p>
 
 <p>(Question to audience) So how does a computer represent such a thing?</p>
 
@@ -144,13 +144,39 @@
 
 <ul class="signquot" style="text-align:left; margin-left:auto; margin-right:auto">
 <li>US-ASCII: fits in 7 bits or you can't say it</li>
-<li>ISO-8859-1 (a.k.a. Latin-1): Characters for most Western European languages in 8 bits</li>
+<li>ISO-8859-1 (a.k.a. Latin-1): Characters for most Western European languages in 8 bits; apache default</li>
 <li>Windows-1252: Intentionally confused with ISO-8859-1</li>
 <li>UTF-8: Superset of ASCII using upper bits to indicate multi-byte chaacters</li>
-<li>Whatever www.kfeducation.com claims to be spitting out.</li>
 </ul>
 
-<p>As far as I'm concerned, there's no reason to use anything except UTF-8 unless some external system gives you strings in a different format.  ISO-8859-1 seems to be pretty common, though.  You can get away with that in HTML pages since you can still represent any character using 'numeric character references'.  But I have noticed my browser doing strange things with user input when the server doesn't declare the page a form is on as UTF-8-encoded, though, like turning &#35987; into &amp;#35987;.  So I still think it's better to make everything UTF-8 where possible.</p>
+<p>As far as I'm concerned, there's no reason to use anything except UTF-8 unless some external system gives you strings in a different format.  ISO-8859-1 (usually actually Windows-1252) seems to be pretty common, though.  You can get away with that in HTML pages since you can still represent any character using 'numeric character references'.  But I have noticed my browser doing strange things with user input when the server doesn't declare the page a form is on as UTF-8-encoded, though, like turning &#35987; into &amp;#35987;.  So I still think it's better to make everything UTF-8 where possible.</p>
+
+<hr />
+
+<p class="signquot">HTML Text
+<br /><br/>(i.e. the stuff between &gt; and &lt;)</p>
+
+<p>I'm not going to go into HTML structural markup - only about pieces of HTML that represent actual text.  i.e. the pieces of the document between the tags.</p>
+
+<p>Parsing text from HTML is one step more complex than reading plain text because not only do you have to translate bytes to characters, but you also have to interpret escape sequences.  Since angle brackets and ampersands have special meaning, they <em>must</em> be escaped in HTML text, either as entities or numeric references.  But it's perfectly valid to escape any character, even if it has no special meaning.</p>
+
+<hr />
+
+<table class="signquot chartable">
+<tr><th>Entity</th><th>Numeric</th><th>Text</th></tr>
+<tr><td>&amp;amp;</td><td>&amp;#38;</td><td>&amp;</td></tr>
+<tr><td>&amp;lt;</td><td>&amp;#60;</td><td>&lt;</td></tr>
+<tr><td></td><td>&amp;#65;</td><td>A</td></tr>
+<tr><td></td><td>&amp;#35987;</td><td>&#35987;</td></tr>
+</table>
+
+<p>Note that if you escape something <em>twice</em>, you will
+
+
+
+
+
+
 
 <p>Now I'm going to go over an example of how <em>not</em> paying attention to encoding could get you in trouble.</p>
 

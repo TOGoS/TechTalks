@@ -7,3 +7,16 @@ blockquote.signquot, .signquot {
 	font-size: 24pt;
 	color: darkred;
 }
+table.signquot {
+	text-align: left;
+	margin-left: auto;
+	margin-right: auto;
+}
+.chartable {
+	border-collapse: collapse;
+}
+.chartable td, .chartable th {
+	border: 1px solid darkred;
+	padding-left: 1em;
+	padding-right: 1em;
+}
