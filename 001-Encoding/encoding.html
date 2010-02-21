@@ -1,7 +1,7 @@
 <html>
 <head>
 <title>This is not a character: The treachery of byte sequences</title>
-<link rel="stylesheet" type="text/cas" href="../style/article.css"/>
+<link rel="stylesheet" type="text/css" href="../style/article.css"/>
 </head>
 <body>
 
@@ -53,13 +53,17 @@
 
 <h2>This is not a character</h2>
 
+<!--
 <p>Even the sub-topic has a subtitle:</p>
+-->
 
 <hr />
 
 <h3>The treachery of byte sequences</h3>
 
+<!--
 <p>This is going to be about character encoding.</p>
+-->
 
 <p>Regarding paying proper attention to character encodings, a wise man once said</p>
 
@@ -67,7 +71,9 @@
 
 <blockquote class="signquot">IT'S NOT THAT HARD</blockquote>
 
-<p>Joel has a really <a href="http://www.joelonsoftware.com/articles/Unicode.html">nice article</a> about things like ASCII, Unicode, and UTF-8, but I'm going to go at this from more of a '<i>just be sure to keep track of how your strings are encoded and everything will work out fine</i>' perspective, skipping over most technical details of any given encoding.</p>
+<p>Joel has a really <a href="http://www.joelonsoftware.com/articles/Unicode.html">nice article</a> about things like ASCII, Unicode, and UTF-8, but I'm going to go at this from more of a '<i>just be sure to keep track of how your strings are encoded and everything will work out fine</i>' perspective, skipping over specific encoding details.</p>
+
+<p>I'm not going to talk strictly about character encodings, either.  I'm going to start by talking about escape sequences.</p>
 
 <hr />
 
@@ -75,9 +81,9 @@
 
 <p class="signquot">&#35987;</p>
 
-<p>Actually, to be precise, I need to clarify what I mean by 'this'.  I don't mean the pixels on the screen, I don't mean the wall.  I mean what do these lines and squiggles represent?</p>
+<p>Actually, I need to clarify what I mean by 'this'.  I don't mean the pixels on the screen, I don't mean the wall.  What I mean is: what do these lines and squiggles represent?</p>
 
-<p>The short answer is that it's the traditional chinese character for 'cat'.  It's not a number, it's not really a picture (though it is depicted by one), and it's certainly not an actual cat.  Like the letter 'A', it's an abstract object that happens to have a commonly recognised representation and a commonly understood meaning.  That bunch of lines projected on the wall is just a way of communicating it to you.</p>
+<p>The short answer is that it's the traditional chinese character for 'cat'.  It's not a number, it's not a specific picture (though it is depicted by one), and it's certainly not an actual cat.  Like the letter 'A', it's an abstract object that happens to have a commonly recognised representation and a commonly understood meaning.  That bunch of lines projected on the wall is just a way of communicating it to you.</p>
 
 <p>(Question to audience) So how does a computer represent such a thing?</p>
 
@@ -105,17 +111,71 @@
 <tr><td>&#35987;</td><td>35987</td>
 </table></center>
 
-<p>I can say "character" here instead of "pictoral representation of character", because this entire document truly is made up of characters, along with some formatting information.  What you're seeing on the wall here is not the document itself, but a picture of a section of the document (or a section of a picture of it).  But I'll talk more about that distinction another time.</p>
+<!--
+<p>I can say "character" here instead of "pictoral representation of character", because if you consider this entire document to be made up of characters, along with some formatting information.  What you're seeing on the wall here is not the document itself, but a picture of a section of the document (or a section of a picture of it).  But I'll talk more about that distinction another time.</p>
+-->
 
 <p>(Question to audience) Any questions so far?</p>
 
 <p>The next question we need to ask ourselves is: how does the computer represent those numbers?  Keep in mind that the numbers for most characters won't fit in 8 bits, and that sometimes you need certain characters to mean special things, like angle brackets in HTML.  So this problem is a tad more complicated.</p>
 
-<p>Fortunately, you can still keep things easy for yourself simply by being aware of how the characters you are working with are encoded!  The method by which code points are translated to and from sequences of bits or bytes called a "character encoding"</p>
+<p>Fortunately, you can still keep things easy simply by being aware of how the characters you are working with are encoded, and what the program you are sending them to.  If they do not match, then you convert.</p>
+
+<p>So let's start with the simplest case.</p>
 
 <hr />
 
-<p>Here are some examples of character encodings that you may be familar with:</p>
+<p class="signquot">text/plain
+<br />a.k.a. Plain Text</p>
+
+<p>In a 'plain text' string, every character means itself.  This can be contrasted with things like HTML, where ampersands, angle brackets, and sometimes quotes don't represent actually represent themselves in the document because they are used for metadata and escape sequences.  It is also different from literal string syntax in many programming languages where backslashes have a special meaning, and don't actually mean backslash unless you put two of them together, in which case they mean one backslash.</p>
+
+<p>So in that regard, plain text is pretty simple.  What makes it tricky is that strings in computers are usually stored as character sequences.  They are stored as byte sequences, and therefore...</p>
+
+<hr />
+
+<p class="signquot">...we must specify how to interpret bytes as characters, and store characters as bytes.</p>
+
+<p>This pair of conversion functions is called a "character encoding".  There are many encodings to choose from.  A lot of problems are caused by people creating strings and not paying attention to how they are encoded.</p>
+
+<hr />
+
+<p>Here is a list of some common encodings:</p>
+
+<ul class="signquot" style="text-align:left; margin-left:auto; margin-right:auto">
+<li>US-ASCII: fits in 7 bits or you can't say it</li>
+<li>ISO-8859-1 (a.k.a. Latin-1): Characters for most Western European languages in 8 bits</li>
+<li>Windows-1252: Intentionally confused with ISO-8859-1</li>
+<li>UTF-8: Superset of ASCII using upper bits to indicate multi-byte chaacters</li>
+<li>Whatever www.kfeducation.com claims to be spitting out.</li>
+</ul>
+
+<p>As far as I'm concerned, there's no reason to use anything except UTF-8 unless some external system gives you strings in a different format.  ISO-8859-1 seems to be pretty common, though.  You can get away with that in HTML pages since you can still represent any character using 'numeric character references'.  But I have noticed my browser doing strange things with user input when the server doesn't declare the page a form is on as UTF-8-encoded, though, like turning &#35987; into &amp;#35987;.  So I still think it's better to make everything UTF-8 where possible.</p>
+
+<p>Now I'm going to go over an example of how <em>not</em> paying attention to encoding could get you in trouble.</p>
+
+TODO: make a real example
+
+<hr />
+<hr />
+
+<!--
+<pre class="signquot" style="text-align:left; margin-left:auto; margin-right:auto">
+$mahText = file_get_contents('mahfile.txt');
+$mahHtml = htmlentities($mahText);
+
+echo "&lt;html&gt;&lt;body>\n\n&lt;p&gt;The file says:&lt;/p&gt;\n\n";
+echo "&lt;pre&gt;$mahHtml&lt;/pre&gt;\n\n&lt;/body&gt;&lt;/html&gt;"
+</pre>
+
+<p>At first glance this code looks fine.  Thing is, htmlentities encodes certain characters to HTML entities, but we're passing it a PHP string, which is actually just a bunch of bytes with no information about how characters are encoded.  So it has to decode the characters internally, and we didn't tell it what character encoding to use.  It defaults to ISO-8859-1.  So if your mahfile.txt was UTF-8 encoded and full of chinese characters, your HTML output would be full of little boxes and </p>
+
+<!--The method by which code points are translated to and from sequences of bits or bytes called a "character encoding"</p>-->
+
+<hr />
+
+
+<p>Here's examples of different kinds of strings:</p>
 
 <ul class="signquot" style="text-align:left">
 <li>ASCII: fits in 7 bits or you can't say it</li>

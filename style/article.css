@@ -2,7 +2,8 @@ h1, h2, h3, h4, h5 {
 	text-align: center;
 }
 
-.signquot {
+blockquote.signquot, .signquot {
 	text-align: center;
 	font-size: 24pt;
+	color: darkred;
 }
