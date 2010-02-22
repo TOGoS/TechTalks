@@ -79,7 +79,7 @@
 
 <p>(Question to audience) What's this?</p>
 
-<p class="signquot">&#35987;</p>
+<p class="signquot2">&#35987;</p>
 
 <p>Actually, I need to clarify what I mean by 'this'.  I don't mean the pixels on the screen, I don't mean the wall.  What I mean is: what do these lines and squiggles represent?</p>
 
@@ -95,7 +95,7 @@
 
 <hr />
 
-<p class="signquot">Unicode</p>
+<h3>Unicode</h3>
 
 <p>Unicode makes deciding what number to use for any given character easy, because it explicitly defines which number goes with each character.  That's all Unicode is.  A standard, widely-used, character number map.  In character set terminology, each of these numbers is called "a code point", by the way.</p>
 
@@ -125,8 +125,8 @@
 
 <hr />
 
-<p class="signquot">text/plain
-<br />a.k.a. Plain Text</p>
+<h3>text/plain</h3>
+<h4>a.k.a. Plain Text</h4>
 
 <p>In a 'plain text' string, every character means itself.  This can be contrasted with things like HTML, where ampersands, angle brackets, and sometimes quotes don't represent actually represent themselves in the document because they are used for metadata and escape sequences.  It is also different from literal string syntax in many programming languages where backslashes have a special meaning, and don't actually mean backslash unless you put two of them together, in which case they mean one backslash.</p>
 
@@ -153,8 +153,8 @@
 
 <hr />
 
-<p class="signquot">HTML Text
-<br /><br/>(i.e. the stuff between &gt; and &lt;)</p>
+<h3>HTML Text</h3>
+<h4>(i.e. the stuff between &gt; and &lt;)</h4>
 
 <p>I'm not going to go into HTML structural markup - only about pieces of HTML that represent actual text.  i.e. the pieces of the document between the tags.</p>
 
@@ -163,25 +163,91 @@
 <hr />
 
 <table class="signquot chartable">
-<tr><th>Entity</th><th>Numeric</th><th>Text</th></tr>
+<tr><th>Entity</th><th>Numeric</th><th>Interpreted as</th></tr>
 <tr><td>&amp;amp;</td><td>&amp;#38;</td><td>&amp;</td></tr>
 <tr><td>&amp;lt;</td><td>&amp;#60;</td><td>&lt;</td></tr>
 <tr><td></td><td>&amp;#65;</td><td>A</td></tr>
 <tr><td></td><td>&amp;#35987;</td><td>&#35987;</td></tr>
 </table>
 
-<p>Note that if you escape something <em>twice</em>, you will
+<p>Note that if you escape something <em>twice</em>, you will escape the escape sequence.  Then you get this:</p>
 
+<hr />
 
+<table class="signquot chartable">
+<tr><th>Escaped (2x)</th><th>Interpreted as</th></tr>
+<tr><td>&amp;amp;amp;</td><td>&amp;amp;</td></tr>
+<tr><td>&amp;amp;lt;</td><td>&amp;lt;</td></tr>
+<tr><td>&amp;amp;#65;</td><td>&amp;#65;</td></tr>
+<tr><td>&amp;amp;#35987;</td><td>&amp;#35987;</td></tr>
+</table>
 
+<p>You might want to do that if you're talking about HTML syntax in an HTML document.  If you don't want to end up with stuff like this, then you need to keep track of what layers of escaping your text has gone though so you don't over-do it.</p>
 
+<hr />
 
+<h3>JSON strings</h3>
 
+<table class="signquot chartable">
+<tr><th>JSON</th><th>Interpreted as</th></tr>
+<tr><td>"abc"</td><td>abc</td></tr>
+<tr><td>"\"\t\\"</td><td>" &nbsp; &nbsp; \</td></tr>
+<tr><td>"\u8C93"</td><td>&#35987;</td></tr>
+<tr><td>"\\u8C93 \\\\"</td><td>\u8C93 \\</td></tr>
+<tr><td>"&amp;amp;"</td><td>&amp;amp;</td></tr>
+</table>
 
-<p>Now I'm going to go over an example of how <em>not</em> paying attention to encoding could get you in trouble.</p>
+<p>Same idea here as the table I showed for HTML escapes except here quote and backslash are the escape characters.  This chart also shows what happens when you escape your escape characters, and shows the syntax for representing arbitrary unicode characters up to \uFFFF, which is backslash-U followed by 4 hexadecimal digits.  Similar to HTML, since &#35987; is not an escape character, you could represent it literally in your JSON string, but to do that requires the reader and writer to agree on what character encoding is being used.</p>
 
-TODO: make a real example
+<hr />
 
+<h3>Specifing encoding of a file served over HTTP</h3>
+
+<pre class="signquot">
+HTTP/1.0 200 Aiiight
+X-Editors-Note: Yay for explicit charset!
+Content-Type: text/html; <b>charset=utf-8</b>
+
+&lt;html&gt;&lt;body&gt;
+&lt;p&gt;I spell cat like &#35987;&lt;/p&gt;
+&lt;/body&gt;&lt;/html&gt;
+</pre>
+
+<p>Since there's no good way to represent the actual bytes sent on here, I wrote out &#35987; as if it were correctly encoded.  In this case that would bean as UTF-8, because that's what the content-type header said it was going to be.</p>
+
+<hr />
+
+<pre class="signquot">
+HTTP/1.0 200 Aiiight
+X-Editors-Note: j/k, actually it's UTF-8
+Content-Type: text/html; <b>charset=iso-8859-1</b>
+
+&lt;html&gt;&lt;body&gt;
+&lt;p&gt;I spell cat like &#192;&#135;&#345;&lt;/p&gt;
+&lt;/body&gt;&lt;/html&gt;
+</pre>
+
+<p>In this example, the content was still UTF-8 encoded, but the header claimed it was something else.  A program reading the response would therefore interpret our &#35987; character as something goofy, which isn't what we meant.  We could also leave the charset part off of the content-type header completely, in which case the browser would have to guess what character set we were using.</p>
+
+<hr />
+
+<pre class="signquot">
+HTTP/1.0 200 Aiiight
+X-Editors-Note1: this page will turn out fine as long
+X-Editors-Note2: as browser picks an ASCII-based charset
+Content-Type: text/html
+
+&lt;html&gt;&lt;body&gt;
+&lt;p&gt;I spell cat like &amp;#35987;&lt;/p&gt;
+&lt;/body&gt;&lt;/html&gt;
+</pre>
+
+<p>Sometimes *ahem*workingonschweser*cough* we don't have a lot of control over what the web server says the character set is, or we might be writing parts of existing pages that might have all sorts of screwed up stuff in them, or storing things into a database with no way to indicate what character set they're encoded in.</p>
+
+...
+
+<hr />
+<hr />
 <hr />
 <hr />
 
