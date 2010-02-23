@@ -22,6 +22,7 @@
 
 <blockquote class="signquot">
 <img src="../images/MagrittePipe.jpg" style="width:90%" alt="This is not a pipe"/>
+<p class="image-alt">[Pipe]</p>
 </blockquote>
 
 <p class="narration">Actually that text isn't English; it's French.  It says "This is not a pipe".</p>
@@ -36,6 +37,7 @@
 
 <blockquote class="signquot">
 <img src="../images/MagrittePipeClarified.jpg" style="width:90%" alt="The object depicted in this picture is a pipe.  The picture itself is <em>not</em> a pipe."/>
+<p class="image-alt">[Reworded Pipe]</p>
 </blockquote>
 
 <p class="narration">But art works are more fun when they're full of ambiguities.  Ambiguities also form the foundation of many intro to philosophy courses.  But they're not usually useful when you're making engineering decisions.  So, given that, I'm going to spend this talk prattling on about  how the world will make more sense and your programs will be more 'robust' if you make sure to define what exactly it is you're talking about.</p>
@@ -58,7 +60,7 @@
 
 </div><div class="slide">
 
-<blockquote class="signquot">IT'S NOT THAT HARD</blockquote>
+<blockquote class="signquot2">IT'S NOT THAT HARD</blockquote>
 
 <p class="narration">Joel Spolsky has a really <a href="http://www.joelonsoftware.com/articles/Unicode.html">nice article</a> about things like ASCII, Unicode, and UTF-8, but I'm going to go at this from more of a '<i>just be sure to keep track of how your strings are encoded and everything will work out fine</i>' perspective, skipping over details of specific encodings.</p>
 
@@ -93,6 +95,8 @@ called</p>
 
 <p class="narration">Here're a few Uni-code points:</p>
 
+<h4>Uni-code points</h4>
+
 <center><table class="signquot chartable">
 <tr><th>Character</th><th>Number</th></tr>
 <tr><td>A</td><td>65</td>
@@ -126,7 +130,7 @@ are sending them to is expecting.  If they do not match, then you convert.</p>
 
 </div><div class="slide">
 
-<p class="signquot">...we must specify how to interpret bytes as characters, and how to store characters as bytes.</p>
+<p class="signquot2">...we must specify how to interpret bytes as characters, and how to store characters as bytes.</p>
 
 <p class="narration">This pair of conversion functions is called a "character encoding", or more generally a 'charset', since 'character encoding' has some connotation of being separate from the mapping of numbers to characters.  For the purposes of this presentation I will treat those things as a single step, and therefore will be using the term 'charset'.</p>
 
@@ -158,6 +162,8 @@ are sending them to is expecting.  If they do not match, then you convert.</p>
 
 </div><div class="slide">
 
+<h4>HTML Escapes</h4>
+
 <table class="signquot chartable">
 <tr><th>Entity</th><th>Numeric</th><th>Interpreted as</th></tr>
 <tr><td>&amp;amp;</td><td>&amp;#38;</td><td>&amp;</td></tr>
@@ -169,6 +175,8 @@ are sending them to is expecting.  If they do not match, then you convert.</p>
 <p class="narration">Note that if you escape something <em>twice</em>, you will escape the escape sequence.  Then you get this:</p>
 
 </div><div class="slide">
+
+<h4>HTML Double-Escapes</h4>
 
 <table class="signquot chartable">
 <tr><th>Escaped (2x)</th><th>Interpreted as</th></tr>
@@ -182,7 +190,7 @@ are sending them to is expecting.  If they do not match, then you convert.</p>
 
 </div><div class="slide">
 
-<h3>JSON strings</h3>
+<h3>JSON Strings</h3>
 
 <table class="signquot chartable">
 <tr><th>JSON</th><th>Interpreted as</th></tr>
@@ -241,7 +249,7 @@ Content-Type: text/html
 &lt;/body&gt;&lt;/html&gt;
 </pre>
 
-<p class="narration">Sometimes *ahem*schweser*cough* we don't have a lot of control over what the web server says the character set is, or we might be writing parts of existing pages that might have all sorts of screwed up stuff in them, or storing things into a database with no way to indicate what character set they're encoded in.  In these cases have to assume that the charset is 'US-ASCII', which is kind of a lowest-common-denominator (assuming nobody's using EBCDIC or anything like that).</p>
+<p class="narration">Sometimes *ahem*schweser*cough* we don't have a lot of control over what the web server says the character set is, or we might be writing parts of existing pages that might have all sorts of screwed up stuff in them, or storing things into a database with no way to indicate what character set they're encoded in.  In these cases have to assume that the charset is 'US-ASCII', which is kind of a lowest-common-denominator charset (assuming nobody's using EBCDIC or anything like that).</p>
 
 <p class="narration">But as long as the stuff we're outputting or storing in the database is expected to be HTML or JSON-encoded, we're still able to represent any character we want, by using HTML or JSON escape sequences, respectively.</p>
 

@@ -13,6 +13,9 @@ h1, h2, h3, h4, h5, blockquote.signquot, p.signquot, p.signquot2 {
 	margin-left: auto;
 	margin-right: auto;
 }
+.image-alt {
+	display: none;
+}
 
 @media screen {
 	h1 {
@@ -35,6 +38,18 @@ h1, h2, h3, h4, h5, blockquote.signquot, p.signquot, p.signquot2 {
 	}
 }
 
+@media print {
+	.slide {
+		border-top: 1px solid;
+	}
+	img {
+		display: none;
+	}
+	.image-alt {
+		display: block;
+	}
+}
+
 @media projection {
 	body {
 		background: black;
@@ -43,13 +58,12 @@ h1, h2, h3, h4, h5, blockquote.signquot, p.signquot, p.signquot2 {
 	}
 	.slide {
 		page-break-before: always;
+		padding: 10pt;
 	}
-	.slide > * {
-		margin-top: auto;
-		margin-bottom: auto;
+	.slide > h1, .slide > h2, .slide > h3, .slide > h4, .slide > pre {
+		padding-top: 40pt;
 	}
 	p.signquot, p.signquot2, h1, h2, h3, h4, h5, h6, table, ul {
-		padding-top: 50pt;
 	}
 	h1 {
 		font-size: 72pt;
@@ -60,8 +74,11 @@ h1, h2, h3, h4, h5, blockquote.signquot, p.signquot, p.signquot2 {
 	h3 {
 		font-size: 56pt;
 	}
-	h4, .signquot {
+	h4 {
 		font-size: 48pt;
+	}
+	.signquot {
+		font-size: 28pt;
 	}
 	.chartable td, .chartable th {
 		border-color: red;
