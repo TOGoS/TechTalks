@@ -1,13 +1,22 @@
-h1, h2, h3, h4, h5 {
+h1, h2, h3, h4, h5, blockquote.signquot, .signquot, .signquot2 {
 	text-align: center;
-}
-
-blockquote.signquot, .signquot {
-	text-align: center;
-	font-size: 24pt;
 	color: darkred;
 }
-table.signquot {
+
+h1 {
+	font-size: 36pt;
+}
+h2, .signquot2 {
+	font-size: 32pt;
+}
+h3 {
+	font-size: 28pt;
+}
+h4, .signquot {
+	font-size: 24pt;
+}
+
+table.signquot, pre.signquot {
 	text-align: left;
 	margin-left: auto;
 	margin-right: auto;
