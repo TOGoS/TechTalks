@@ -73,8 +73,6 @@
 
 <p>Joel has a really <a href="http://www.joelonsoftware.com/articles/Unicode.html">nice article</a> about things like ASCII, Unicode, and UTF-8, but I'm going to go at this from more of a '<i>just be sure to keep track of how your strings are encoded and everything will work out fine</i>' perspective, skipping over specific encoding details.</p>
 
-<p>I'm not going to talk strictly about character encodings, either.  I'm going to start by talking about escape sequences.</p>
-
 <hr />
 
 <p>(Question to audience) What's this?</p>
@@ -91,7 +89,10 @@
 
 <p>The next point being: what's the number for &#35987;?</p>
 
-<p>Well fortunately for us programmers there's this thing called</p>
+<p><em>If</em> things were all screwed up, everyone and their brother
+would come up with their own number for each character, and nobody would be
+able to talk to anyone else.  Fortunately for us programmers there's this thing
+called</p>
 
 <hr />
 
@@ -119,7 +120,9 @@
 
 <p>The next question we need to ask ourselves is: how does the computer represent those numbers?  Keep in mind that the numbers for most characters won't fit in 8 bits, and that sometimes you need certain characters to mean special things, like angle brackets in HTML.  So this problem is a tad more complicated.</p>
 
-<p>Fortunately, you can still keep things easy simply by being aware of how the characters you are working with are encoded, and what the program you are sending them to.  If they do not match, then you convert.</p>
+<p>Fortunately, you can still keep things easy simply by being aware of how
+the characters you are working with are encoded, and what format the program you
+are sending them to is expecting.  If they do not match, then you convert.</p>
 
 <p>So let's start with the simplest case.</p>
 
@@ -130,13 +133,13 @@
 
 <p>In a 'plain text' string, every character means itself.  This can be contrasted with things like HTML, where ampersands, angle brackets, and sometimes quotes don't represent actually represent themselves in the document because they are used for metadata and escape sequences.  It is also different from literal string syntax in many programming languages where backslashes have a special meaning, and don't actually mean backslash unless you put two of them together, in which case they mean one backslash.</p>
 
-<p>So in that regard, plain text is pretty simple.  What makes it tricky is that strings in computers are usually stored as character sequences.  They are stored as byte sequences, and therefore...</p>
+<p>So in that regard, plain text is pretty simple.  What makes it tricky is that strings in computers are not usually stored as character sequences, but rather as byte sequences, and therefore...</p>
 
 <hr />
 
-<p class="signquot">...we must specify how to interpret bytes as characters, and store characters as bytes.</p>
+<p class="signquot">...we must specify how to interpret bytes as characters, and how to store characters as bytes.</p>
 
-<p>This pair of conversion functions is called a "character encoding".  There are many encodings to choose from.  A lot of problems are caused by people creating strings and not paying attention to how they are encoded.</p>
+<p>This pair of conversion functions is called a "character encoding".  There are many encodings to choose from.  A lot of problems are caused by people not paying attention to which ones they are using.</p>
 
 <hr />
 
@@ -144,12 +147,14 @@
 
 <ul class="signquot" style="text-align:left; margin-left:auto; margin-right:auto">
 <li>US-ASCII: fits in 7 bits or you can't say it</li>
-<li>ISO-8859-1 (a.k.a. Latin-1): Characters for most Western European languages in 8 bits; apache default</li>
-<li>Windows-1252: Intentionally confused with ISO-8859-1</li>
-<li>UTF-8: Superset of ASCII using upper bits to indicate multi-byte chaacters</li>
+<li>ISO-8859-1 (a.k.a. Latin-1): Characters for most Western European languages in 8 bits</li>
+<li>Windows-1252: Similar to and often confused with ISO-8859-1</li>
+<li>UTF-8: Superset of ASCII using upper bits to indicate multi-byte characters</li>
 </ul>
 
-<p>As far as I'm concerned, there's no reason to use anything except UTF-8 unless some external system gives you strings in a different format.  ISO-8859-1 (usually actually Windows-1252) seems to be pretty common, though.  You can get away with that in HTML pages since you can still represent any character using 'numeric character references'.  But I have noticed my browser doing strange things with user input when the server doesn't declare the page a form is on as UTF-8-encoded, though, like turning &#35987; into &amp;#35987;.  So I still think it's better to make everything UTF-8 where possible.</p>
+<p>As far as I'm concerned, there's no reason to use anything except UTF-8 except for compatibility.  ISO-8859-1 (usually actually Windows-1252) seems to be pretty common, though.</p>
+
+<p>Now let's complicate matters...</p>
 
 <hr />
 
