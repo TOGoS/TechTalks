@@ -41,11 +41,7 @@
 
 <p>But art works are more fun when they're full of ambiguities.  Ambiguities also form the foundation of many intro to philosophy courses.  But they're not usually useful when you're making engineering decisions.  So, given that, I'm going to spend this talk prattling on about  how the world will make more sense and your programs will be more 'robust' if you make sure to define what exactly it is you're talking about.</p>
 
-<!--
-<p>Assuming I actually do get around to doing more of these, it's going to be kind of like the ISP class they had me take in high school.  That class was about a lot of different things but it all tied back into the idea that energy is always conserved, and that you could use that fact to help solve lots of different equations.  Similarly, I hope to touch on several topics that I think are interesting and/or useful, but always emphasizing that main idea.</p>
-
-<p>TODO: Cut this down by 2/3rds so people don't fall asleep and/or leave.</p>
--->
+<p>So, assuming I actually do get around to doing more of these (which is doubtful), it's going to be kind of like the ISP class they had me take in high school.  That class was about a lot of different things but it all tied back into the idea that energy is always conserved, and that you could use that fact to help solve lots of different problems.  Similarly, I hope to touch on several topics that I think are interesting and/or useful, but always emphasizing that main idea that by being very precise in your programming you gain a lot of power over the computer and can make it do pretty much anything you want.</p>
 
 <p>Now on to today's sub-topic.</p>
 
@@ -53,17 +49,11 @@
 
 <h2>This is not a character</h2>
 
-<!--
-<p>Even the sub-topic has a subtitle:</p>
--->
+<p>There's a subtitle for this subtopic:</p>
 
 <hr />
 
 <h3>The treachery of byte sequences</h3>
-
-<!--
-<p>This is going to be about character encoding.</p>
--->
 
 <p>Regarding paying proper attention to character encodings, a wise man once said</p>
 
@@ -71,7 +61,7 @@
 
 <blockquote class="signquot">IT'S NOT THAT HARD</blockquote>
 
-<p>Joel has a really <a href="http://www.joelonsoftware.com/articles/Unicode.html">nice article</a> about things like ASCII, Unicode, and UTF-8, but I'm going to go at this from more of a '<i>just be sure to keep track of how your strings are encoded and everything will work out fine</i>' perspective, skipping over specific encoding details.</p>
+<p>Joel Spolsky has a really <a href="http://www.joelonsoftware.com/articles/Unicode.html">nice article</a> about things like ASCII, Unicode, and UTF-8, but I'm going to go at this from more of a '<i>just be sure to keep track of how your strings are encoded and everything will work out fine</i>' perspective, skipping over details of specific encodings.</p>
 
 <hr />
 
@@ -104,7 +94,7 @@ called</p>
 
 <p>Here're a few Uni-code points:</p>
 
-<center><table class="signquot">
+<center><table class="signquot chartable">
 <tr><th>Character</th><th>Number</th></tr>
 <tr><td>A</td><td>65</td>
 <tr><td>a</td><td>97</td>
@@ -139,11 +129,13 @@ are sending them to is expecting.  If they do not match, then you convert.</p>
 
 <p class="signquot">...we must specify how to interpret bytes as characters, and how to store characters as bytes.</p>
 
-<p>This pair of conversion functions is called a "character encoding".  There are many encodings to choose from.  A lot of problems are caused by people not paying attention to which ones they are using.</p>
+<p>This pair of conversion functions is called a "character encoding", or more generally a 'charset', since 'character encoding' has some connotation of being separate from the mapping of numbers to characters.  For the purposes of this presentation I will treat those things as a single step, and therefore will be using the term 'charset'.</p>
+
+<p>There are many charsets to choose from.  A lot of problems are caused by people not paying attention to which ones they are using.</p>
 
 <hr />
 
-<p>Here is a list of some common encodings:</p>
+<p>Here is a list of some common charsets:</p>
 
 <ul class="signquot" style="text-align:left; margin-left:auto; margin-right:auto">
 <li>US-ASCII: fits in 7 bits or you can't say it</li>
@@ -152,7 +144,7 @@ are sending them to is expecting.  If they do not match, then you convert.</p>
 <li>UTF-8: Superset of ASCII using upper bits to indicate multi-byte characters</li>
 </ul>
 
-<p>As far as I'm concerned, there's no reason to use anything except UTF-8 except for compatibility.  ISO-8859-1 (usually actually Windows-1252) seems to be pretty common, though.</p>
+<p>As far as I'm concerned, there's no reason to use anything except UTF-8 except for compatibility.  Aside from its ability to represent any unicode character while only using a single byte for characters common in English text, UTF-8 has nice properties that make it easy to deal with even without decoding it, which I'm not going to talk about.  A much worse but more common charset is ISO-8859-1, which is often confused with the very similar Windows-1252.  Those are single-byte charsets that can only represent 256 different characters.</p>
 
 <p>Now let's complicate matters...</p>
 
@@ -202,14 +194,16 @@ are sending them to is expecting.  If they do not match, then you convert.</p>
 <tr><td>"&amp;amp;"</td><td>&amp;amp;</td></tr>
 </table>
 
-<p>Same idea here as the table I showed for HTML escapes except here quote and backslash are the escape characters.  This chart also shows what happens when you escape your escape characters, and shows the syntax for representing arbitrary unicode characters up to \uFFFF, which is backslash-U followed by 4 hexadecimal digits.  Similar to HTML, since &#35987; is not an escape character, you could represent it literally in your JSON string, but to do that requires the reader and writer to agree on what character encoding is being used.</p>
+<p>Same idea here as the table I showed for HTML escapes except here quote and backslash are the escape characters.  This chart also shows what happens when you escape your escape characters, and shows the syntax for representing arbitrary unicode characters up to \uFFFF, which is backslash-U followed by 4 hexadecimal digits.  Similar to HTML, since &#35987; is not an escape character, you could represent it literally in your JSON string, but to do that requires the reader and writer to agree on what charset is being used.  Which ideally they would.</p>
+
+<p>The next topic is about how to do that.</p>
 
 <hr />
 
-<h3>Specifing encoding of a file served over HTTP</h3>
+<h3>Specifing charset of a file served over HTTP</h3>
 
 <pre class="signquot">
-HTTP/1.0 200 Aiiight
+HTTP/1.0 200 You're winner
 X-Editors-Note: Yay for explicit charset!
 Content-Type: text/html; <b>charset=utf-8</b>
 
@@ -218,12 +212,12 @@ Content-Type: text/html; <b>charset=utf-8</b>
 &lt;/body&gt;&lt;/html&gt;
 </pre>
 
-<p>Since there's no good way to represent the actual bytes sent on here, I wrote out &#35987; as if it were correctly encoded.  In this case that would bean as UTF-8, because that's what the content-type header said it was going to be.</p>
+<p>Since there's no good way to represent the actual bytes sent on here, I wrote out &#35987; as if it were correctly encoded.  In this case that would mean using UTF-8, because that's what the content-type header said it was going to be.</p>
 
 <hr />
 
 <pre class="signquot">
-HTTP/1.0 200 Aiiight
+HTTP/1.0 200 J00 suxx
 X-Editors-Note: j/k, actually it's UTF-8
 Content-Type: text/html; <b>charset=iso-8859-1</b>
 
@@ -232,14 +226,15 @@ Content-Type: text/html; <b>charset=iso-8859-1</b>
 &lt;/body&gt;&lt;/html&gt;
 </pre>
 
-<p>In this example, the content was still UTF-8 encoded, but the header claimed it was something else.  A program reading the response would therefore interpret our &#35987; character as something goofy, which isn't what we meant.  We could also leave the charset part off of the content-type header completely, in which case the browser would have to guess what character set we were using.</p>
+<p>In this example, the content was still UTF-8 encoded, but the header claimed it was something else.  A program reading the response would therefore interpret our &#35987; character as something goofy, which isn't what we meant.  We could also leave the charset part off of the content-type header completely, in which case the browser would have to guess what character set we were using.  Don't do either of these things if you can help it.</p>
 
 <hr />
 
 <pre class="signquot">
-HTTP/1.0 200 Aiiight
-X-Editors-Note1: this page will turn out fine as long
-X-Editors-Note2: as browser picks an ASCII-based charset
+HTTP/1.0 200 Ima send y'all explanatory hedazzz
+X-Editors-Note1: this page will turn out fine as
+X-Editors-Note2: long as browser picks an ASCII-based
+X-Editors-Note3: charset, which is pretty likely.
 Content-Type: text/html
 
 &lt;html&gt;&lt;body&gt;
@@ -247,101 +242,45 @@ Content-Type: text/html
 &lt;/body&gt;&lt;/html&gt;
 </pre>
 
-<p>Sometimes *ahem*workingonschweser*cough* we don't have a lot of control over what the web server says the character set is, or we might be writing parts of existing pages that might have all sorts of screwed up stuff in them, or storing things into a database with no way to indicate what character set they're encoded in.</p>
+<p>Sometimes *ahem*schweser*cough* we don't have a lot of control over what the web server says the character set is, or we might be writing parts of existing pages that might have all sorts of screwed up stuff in them, or storing things into a database with no way to indicate what character set they're encoded in.  In these cases have to assume that the charset is 'US-ASCII', which is kind of a lowest-common-denominator (assuming nobody's using EBCDIC or anything like that).</p>
 
-...
-
-<hr />
-<hr />
-<hr />
-<hr />
-
-<!--
-<pre class="signquot" style="text-align:left; margin-left:auto; margin-right:auto">
-$mahText = file_get_contents('mahfile.txt');
-$mahHtml = htmlentities($mahText);
-
-echo "&lt;html&gt;&lt;body>\n\n&lt;p&gt;The file says:&lt;/p&gt;\n\n";
-echo "&lt;pre&gt;$mahHtml&lt;/pre&gt;\n\n&lt;/body&gt;&lt;/html&gt;"
-</pre>
-
-<p>At first glance this code looks fine.  Thing is, htmlentities encodes certain characters to HTML entities, but we're passing it a PHP string, which is actually just a bunch of bytes with no information about how characters are encoded.  So it has to decode the characters internally, and we didn't tell it what character encoding to use.  It defaults to ISO-8859-1.  So if your mahfile.txt was UTF-8 encoded and full of chinese characters, your HTML output would be full of little boxes and </p>
-
-<!--The method by which code points are translated to and from sequences of bits or bytes called a "character encoding"</p>-->
+<p>But as long as the stuff we're outputting or storing in the database is expected to be HTML or JSON-encoded, we're still able to represent any character we want, by using HTML or JSON escape sequences, respectively.</p>
 
 <hr />
 
+<h4>Assuming output charset=us-ascii...</h4>
 
-<p>Here's examples of different kinds of strings:</p>
+<table class="signquot chartable">
+<tr><th>Input</th><th>The &#35987; says "meow"</th></tr>
+<tr><th>HTML</th><td>The &amp;#35987; says "meow"</td></tr>
+<tr><th>JSON</th><td>"The \u8C93 says \"meow\""</td></tr>
+<tr><th>Text</th><td>The [cat] says "meow"</td></tr>
+</table>
 
-<ul class="signquot" style="text-align:left">
-<li>ASCII: fits in 7 bits or you can't say it</li>
-<li>Multibyte: reserve several bytes for each character</li>
-<li>JSON String: <code>"cat = \u8C93"</code></li>
-<li>X/HTML-entity-encoded: <code>cat = &amp;#35987;</code></li>
-<li>UTF-8: Superset of ASCII using upper bits to indicate multi-byte characters</li>
+<p>So note here that if we're writing something out as plain text,
+ASCII-encoded, we simply can't represent that chinese character.
+But we can get around our charset limitation by using escape
+sequences of a higher-level encoding.</p>
+
+<p>Unfortunately, there's no way to force the PHP htmlentities function to take UTF-8 input and escape all non-ASCII characters.  There're some functions that would do things like that floating around the comments section of the page for that function on PHP.net, but I tried one and it was buggy.  We should probably just go ahead and write one.</p>
+
+<hr />
+
+<h3>Summary</h3>
+
+<ul class="signquot">
+<li>Keep track if I/O charsets and you will not have character problems.</li>
+<li>UTF-8 is a good choice if you want to be able to represent any unicode character.</li>
+<li>When using HTML or JSON you can represent non-ASCII characters without having to
+worry about the charset is used to encode your message (as long as it's a superset of ASCII).</li>
 </ul>
 
-<!--
-<p>I thought of adding URL-encoding to the list, but decided it wasn't much of a character encoding because URL escape sequences are used to encode bytes, which in turn need to be interpreted either as ASCII or UTF-8.</p>
--->
-
-<p>Any one of these methods may be used to encode a string of characters.  And as long as you know how your string is encoded, you can get it back out by decoding using the same method.</p>
+<p>I think that about does it.  Any questions?</p>
 
 <hr />
-
-<p>You can even encode things multiple times so long as you are sure to decode using the same methods in reverse order.</p>
-
-<p style="color:red">TODO: This sucks.
-This talk is really about reversible transformations more than character encodings,
-especially since you get into X/HTML entities, which aren't really 'character encodings' at all.
-Reword/rewrite to reflect this.</p>
-
-<div class="signquot" style="text-align:left">
-xmlencode(&#35987;) = &amp;#35987;<br />
-xmlencode(xmlencode(&#35987;)) = &amp;#35987;<br />
-jsonencode(&#35987;) = "\u8C93"<br />
-jsonencode(xmlencode(&#35987;)) = "&amp;#35987;"<br />
-xmlencode(jsonencode(&#35987;)) = "\u8C93"
-</div>
-
-<p>And you don't have to be the one doing the decoding, either.  If you tell a web browser that you are sending it an HTML document, then send it xmlencode(&#35987;), it will show up on the users screen as &#35987;, because the web browser is doing the decoding.</p>
-
 <hr />
-
-<p class="signquot">&#35987;</p>
-
-</p>On the other hand, if you xmlencode it twice, then the web browser will show something this:</p>
-
 <hr />
-
-<p class="signquot">&amp;#35987;</p>
-
-<p>Which might be usful if you're writing an article about character encodings.</p>
-
 <hr />
-
-<p>But otherwise you don't even need to X/HTML-entity-encode this particular character, as it has no special meaning to X/HTML.  But in this case you and the browser do need to agree on a byte-character encoding.  The easiest way to do this is to send out a header declaring the content type to be:</p>
-
-<p class="signquot">text/html; charset=utf-8</p>
-
-<p>and then making sure that all the strings you are outputting really are UTF-8.</p>
-
-<p>This indicates that the stream of bytes the browser recieves should be transformed to a sequence of characters using UTF-8, and then that sequence of characters should be parsed as HTML.</p>
-
-<p>That there are 2 levels of encodings here (one from bytes to characters, and another from characters to formatting+characters) is probably what gets people confused, especially since you can choose whether to encode non-ASCII characters at the HTML-level or not.</p>
-
-<p>(Question to audience) Any questions now?</p>
-
-<p>Now, if for some reason you can't specify the charset header (say, because the website is already written to output using a different charset), then you should X/HTML-entity-encode any non-ASCII characters.  This is actually the route we've taken to work with text on Schweser.  Anything that's not ASCII text we encode using HTML entities, but that means we need to keep track of what those fields are and be sure to treat them as being HTML-entity-encoded.  Otherwise the users will see a bunch of ampersands in their text.</p>
-
-<hr />
-
-<h3>PHP functions</h3>
-
-<p>As far as I can tell, neither of the 2 built-in PHP functions, htmlentities or htmlspecialchars, will entity-encode all non-ASCII characters.  This means that if you are using them to encode data to be sent to a browser, non-ASCII byte characters will slip right past, and you are relying on the character set/encoding named in the header matching that of the string you're outputting.  If we could entity-encode <em>all</em> non-ASCII characters, then the resulting HTML will be pure ASCII, and since that is a subset of both ISO-8859-1 and UTF-8 (probably the 2 character encodings most likely to be default), we can stop worrying about backing character encodings, as long as we can rely on the client properly handling X/HTML entities.</p>
-
-<p>Therefore I have written this function...</p>
 
 </body>
 </html>
