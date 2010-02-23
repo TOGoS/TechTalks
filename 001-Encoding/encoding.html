@@ -5,94 +5,93 @@
 </head>
 <body>
 
-<p>Welcome to my tech talk.  I actually plan for this to be the first in a series.  The series is called:</p>
+<p class="narration">Welcome to my tech talk.  I actually plan for this to be the first in a series.  The series is called:</p>
 
-<hr />
-
+<div class="slide">
 <h1>Be Explicit</h1>
 
-<p>And has the subtitle:</p>
+<p class="narration">And has the subtitle:</p>
 
-<hr />
+</div><div class="slide">
 
 <h3>English is full of ambiguities.  Your programs should not be.</h3>
 
-<p>To get started, I will use an example:</p>
+<p class="narration">To get started, I will use an example:</p>
 
-<hr />
+</div><div class="slide">
 
 <blockquote class="signquot">
 <img src="../images/MagrittePipe.jpg" style="width:90%" alt="This is not a pipe"/>
 </blockquote>
 
-<p>Actually that text isn't English; it's French.  It says "This is not a pipe".</p>
+<p class="narration">Actually that text isn't English; it's French.  It says "This is not a pipe".</p>
 
-<p>(Question to audience) Who knows why this is paradoxical?</p>
+<p class="narration">(Question to audience) Who knows why this is paradoxical?</p>
 
-<p>(Question to audience) Who knows why it's <em>not</em> paradoxical?</p>
+<p class="narration">(Question to audience) Who knows why it's <em>not</em> paradoxical?</p>
 
-<p>If you take 'this' to mean the object depicted in the picture, then the text would be wrong, since that thing obviously <em>is</em> a pipe.  So either the artist is lying, or was using 'this' to refer to something else.  I think what he meant is that the picture <em>itself</em> is not a pipe.  To clarify things, he could have written something like:</p>
+<p class="narration">If you take 'this' to mean the object depicted in the picture, then the text would be wrong, since that thing obviously <em>is</em> a pipe.  So either the artist is lying, or was using 'this' to refer to something else.  I think what he meant is that the picture <em>itself</em> is not a pipe.  To clarify things, he could have written something like:</p>
 
-<hr />
+</div><div class="slide">
 
 <blockquote class="signquot">
 <img src="../images/MagrittePipeClarified.jpg" style="width:90%" alt="The object depicted in this picture is a pipe.  The picture itself is <em>not</em> a pipe."/>
 </blockquote>
 
-<p>But art works are more fun when they're full of ambiguities.  Ambiguities also form the foundation of many intro to philosophy courses.  But they're not usually useful when you're making engineering decisions.  So, given that, I'm going to spend this talk prattling on about  how the world will make more sense and your programs will be more 'robust' if you make sure to define what exactly it is you're talking about.</p>
+<p class="narration">But art works are more fun when they're full of ambiguities.  Ambiguities also form the foundation of many intro to philosophy courses.  But they're not usually useful when you're making engineering decisions.  So, given that, I'm going to spend this talk prattling on about  how the world will make more sense and your programs will be more 'robust' if you make sure to define what exactly it is you're talking about.</p>
 
-<p>So, assuming I actually do get around to doing more of these (which is doubtful), it's going to be kind of like the ISP class they had me take in high school.  That class was about a lot of different things but it all tied back into the idea that energy is always conserved, and that you could use that fact to help solve lots of different problems.  Similarly, I hope to touch on several topics that I think are interesting and/or useful, but always emphasizing that main idea that by being very precise in your programming you gain a lot of power over the computer and can make it do pretty much anything you want.</p>
+<p class="narration">So, assuming I actually do get around to doing more of these (which is doubtful), it's going to be kind of like the ISP class they had me take in high school.  That class was about a lot of different things but it all tied back into the idea that energy is always conserved, and that you could use that fact to help solve lots of different problems.  Similarly, I hope to touch on several topics that I think are interesting and/or useful, but always emphasizing that main idea that by being very precise in your programming you gain a lot of power over the computer and can make it do pretty much anything you want.</p>
 
-<p>Now on to today's sub-topic.</p>
+<p class="narration">Now on to today's sub-topic.</p>
 
-<hr />
+</div><div class="slide">
 
 <h2>This is not a character</h2>
 
-<p>There's a subtitle for this subtopic:</p>
+<p class="narration">There's a subtitle for this subtopic:</p>
 
-<hr />
+</div><div class="slide">
 
 <h3>The treachery of byte sequences</h3>
 
-<p>Regarding paying proper attention to character encodings, a wise man once said</p>
+<p class="narration">Regarding paying proper attention to character encodings, a wise man once said</p>
 
-<hr />
+</div><div class="slide">
 
 <blockquote class="signquot">IT'S NOT THAT HARD</blockquote>
 
-<p>Joel Spolsky has a really <a href="http://www.joelonsoftware.com/articles/Unicode.html">nice article</a> about things like ASCII, Unicode, and UTF-8, but I'm going to go at this from more of a '<i>just be sure to keep track of how your strings are encoded and everything will work out fine</i>' perspective, skipping over details of specific encodings.</p>
+<p class="narration">Joel Spolsky has a really <a href="http://www.joelonsoftware.com/articles/Unicode.html">nice article</a> about things like ASCII, Unicode, and UTF-8, but I'm going to go at this from more of a '<i>just be sure to keep track of how your strings are encoded and everything will work out fine</i>' perspective, skipping over details of specific encodings.</p>
 
-<hr />
+</div><div class="slide">
 
-<p>(Question to audience) What's this?</p>
+<p class="narration">(Question to audience) What's this?</p>
 
 <p class="signquot2">&#35987;</p>
 
-<p>Actually, I need to clarify what I mean by 'this'.  I don't mean the pixels on the screen, I don't mean the wall.  What I mean is: what do these lines and squiggles represent?</p>
+<p class="narration">Actually, I need to clarify what I mean by 'this'.  I don't mean the pixels on the screen, I don't mean the wall.  What I mean is: what do these lines and squiggles represent?</p>
 
-<p>The short answer is that it's the traditional chinese character for 'cat'.  It's not a number, it's not a specific picture (since you could draw it many different ways and people would still recognise it as the same character), and it's certainly not an actual cat.  Like the letter 'A', it's an abstract object that happens to have a commonly recognised representation and a commonly understood meaning.  That bunch of lines projected on the wall is just a way of communicating it to you.</p>
+<p class="narration">The short answer is that it's the traditional chinese character for 'cat'.  It's not a number, it's not a specific picture (since you could draw it many different ways and people would still recognise it as the same character), and it's certainly not an actual cat.  Like the letter 'A', it's an abstract object that happens to have a commonly recognised representation and a commonly understood meaning.  That bunch of lines projected on the wall is just a way of communicating it to you.</p>
 
-<p>(Question to audience) So how does a computer represent such a thing?</p>
+<p class="narration">(Question to audience) So how does a computer represent such a thing?</p>
 
-<p>That's kind of a trick question.  A computer could represent it lots of ways.  It could store a that bunch of lines as a bitmap, or it could store a recording of someone saying the word.  But to make things easy, computers usually represent these things as numbers.  At least until it's time to show them to a human.  Then they turn them into bitmaps and send them to a display device or something.  But right now I want to talk about numbers.</p>
+<p class="narration">That's kind of a trick question.  A computer could represent it lots of ways.  It could store a that bunch of lines as a bitmap, or it could store a recording of someone saying the word.  But to make things easy, computers usually represent these things as numbers.  At least until it's time to show them to a human.  Then they turn them into bitmaps and send them to a display device or something.  But right now I want to talk about numbers.</p>
 
-<p>The next point being: what's the number for &#35987;?</p>
+<p class="narration">The next point being: what's the number for &#35987;?</p>
 
-<p><em>If</em> things were all screwed up, everyone and their brother
+<p class="narration"><em>If</em> things were all screwed up, everyone and their brother
 would come up with their own number for each character, and nobody would be
 able to talk to anyone else.  Fortunately for us programmers there's this thing
 called</p>
 
-<hr />
+</div><div class="slide">
 
 <h3>Unicode</h3>
 
-<p>Unicode makes deciding what number to use for any given character easy, because it explicitly defines which number goes with each character.  That's all Unicode is.  A standard, widely-used, character number map.  In character set terminology, each of these numbers is called "a code point", by the way.</p>
+<p class="narration">Unicode makes deciding what number to use for any given character easy, because it explicitly defines which number goes with each character.  That's all Unicode is.  A standard, widely-used, character number map.  In character set terminology, each of these numbers is called "a code point", by the way.</p>
 
-<hr />
+</div><div class="slide">
 
-<p>Here're a few Uni-code points:</p>
+<p class="narration">Here're a few Uni-code points:</p>
 
 <center><table class="signquot chartable">
 <tr><th>Character</th><th>Number</th></tr>
@@ -103,39 +102,39 @@ called</p>
 </table></center>
 
 <!--
-<p>I can say "character" here instead of "pictoral representation of character", because if you consider this entire document to be made up of characters, along with some formatting information.  What you're seeing on the wall here is not the document itself, but a picture of a section of the document (or a section of a picture of it).  But I'll talk more about that distinction another time.</p>
+<p class="narration">I can say "character" here instead of "pictoral representation of character", because if you consider this entire document to be made up of characters, along with some formatting information.  What you're seeing on the wall here is not the document itself, but a picture of a section of the document (or a section of a picture of it).  But I'll talk more about that distinction another time.</p>
 -->
 
-<p>(Question to audience) Any questions so far?</p>
+<p class="narration">(Question to audience) Any questions so far?</p>
 
-<p>The next question we need to ask ourselves is: how does the computer represent those numbers?  Keep in mind that the numbers for most characters won't fit in 8 bits, and that sometimes you need certain characters to mean special things, like angle brackets in HTML.  So this problem is a tad more complicated.</p>
+<p class="narration">The next question we need to ask ourselves is: how does the computer represent those numbers?  Keep in mind that the numbers for most characters won't fit in 8 bits, and that sometimes you need certain characters to mean special things, like angle brackets in HTML.  So this problem is a tad more complicated.</p>
 
-<p>Fortunately, you can still keep things easy simply by being aware of how
+<p class="narration">Fortunately, you can still keep things easy simply by being aware of how
 the characters you are working with are encoded, and what format the program you
 are sending them to is expecting.  If they do not match, then you convert.</p>
 
-<p>So let's start with the simplest case.</p>
+<p class="narration">So let's start with the simplest case.</p>
 
-<hr />
+</div><div class="slide">
 
 <h3>text/plain</h3>
 <h4>a.k.a. Plain Text</h4>
 
-<p>In a 'plain text' string, every character means itself.  This can be contrasted with things like HTML, where ampersands, angle brackets, and sometimes quotes don't represent actually represent themselves in the document because they are used for metadata and escape sequences.  It is also different from literal string syntax in many programming languages where backslashes have a special meaning, and don't actually mean backslash unless you put two of them together, in which case they mean one backslash.</p>
+<p class="narration">In a 'plain text' string, every character means itself.  This can be contrasted with things like HTML, where ampersands, angle brackets, and sometimes quotes don't represent actually represent themselves in the document because they are used for metadata and escape sequences.  It is also different from literal string syntax in many programming languages where backslashes have a special meaning, and don't actually mean backslash unless you put two of them together, in which case they mean one backslash.</p>
 
-<p>So in that regard, plain text is pretty simple.  What makes it tricky is that strings in computers are not usually stored as character sequences, but rather as byte sequences, and therefore...</p>
+<p class="narration">So in that regard, plain text is pretty simple.  What makes it tricky is that strings in computers are not usually stored as character sequences, but rather as byte sequences, and therefore...</p>
 
-<hr />
+</div><div class="slide">
 
 <p class="signquot">...we must specify how to interpret bytes as characters, and how to store characters as bytes.</p>
 
-<p>This pair of conversion functions is called a "character encoding", or more generally a 'charset', since 'character encoding' has some connotation of being separate from the mapping of numbers to characters.  For the purposes of this presentation I will treat those things as a single step, and therefore will be using the term 'charset'.</p>
+<p class="narration">This pair of conversion functions is called a "character encoding", or more generally a 'charset', since 'character encoding' has some connotation of being separate from the mapping of numbers to characters.  For the purposes of this presentation I will treat those things as a single step, and therefore will be using the term 'charset'.</p>
 
-<p>There are many charsets to choose from.  A lot of problems are caused by people not paying attention to which ones they are using.</p>
+<p class="narration">There are many charsets to choose from.  A lot of problems are caused by people not paying attention to which ones they are using.</p>
 
-<hr />
+</div><div class="slide">
 
-<p>Here is a list of some common charsets:</p>
+<p class="narration">Here is a list of some common charsets:</p>
 
 <ul class="signquot" style="text-align:left; margin-left:auto; margin-right:auto">
 <li>US-ASCII: fits in 7 bits or you can't say it</li>
@@ -144,20 +143,20 @@ are sending them to is expecting.  If they do not match, then you convert.</p>
 <li>UTF-8: Superset of ASCII using upper bits to indicate multi-byte characters</li>
 </ul>
 
-<p>As far as I'm concerned, there's no reason to use anything except UTF-8 except for compatibility.  Aside from its ability to represent any unicode character while only using a single byte for characters common in English text, UTF-8 has nice properties that make it easy to deal with even without decoding it, which I'm not going to talk about.  A much worse but more common charset is ISO-8859-1, which is often confused with the very similar Windows-1252.  Those are single-byte charsets that can only represent 256 different characters.</p>
+<p class="narration">As far as I'm concerned, there's no reason to use anything except UTF-8 except for compatibility.  Aside from its ability to represent any unicode character while only using a single byte for characters common in English text, UTF-8 has nice properties that make it easy to deal with even without decoding it, which I'm not going to talk about.  A much worse but more common charset is ISO-8859-1, which is often confused with the very similar Windows-1252.  Those are single-byte charsets that can only represent 256 different characters.</p>
 
-<p>Now let's complicate matters...</p>
+<p class="narration">Now let's complicate matters...</p>
 
-<hr />
+</div><div class="slide">
 
 <h3>HTML Text</h3>
 <h4>(i.e. the stuff between &gt; and &lt;)</h4>
 
-<p>I'm not going to go into HTML structural markup - only about pieces of HTML that represent actual text.  i.e. the pieces of the document between the tags.</p>
+<p class="narration">I'm not going to go into HTML structural markup - only about pieces of HTML that represent actual text.  i.e. the pieces of the document between the tags.</p>
 
-<p>Parsing text from HTML is one step more complex than reading plain text because not only do you have to translate bytes to characters, but you also have to interpret escape sequences.  Since angle brackets and ampersands have special meaning, they <em>must</em> be escaped in HTML text, either as entities or numeric references.  But it's perfectly valid to escape any character, even if it has no special meaning.</p>
+<p class="narration">Parsing text from HTML is one step more complex than reading plain text because not only do you have to translate bytes to characters, but you also have to interpret escape sequences.  Since angle brackets and ampersands have special meaning, they <em>must</em> be escaped in HTML text, either as entities or numeric references.  But it's perfectly valid to escape any character, even if it has no special meaning.</p>
 
-<hr />
+</div><div class="slide">
 
 <table class="signquot chartable">
 <tr><th>Entity</th><th>Numeric</th><th>Interpreted as</th></tr>
@@ -167,9 +166,9 @@ are sending them to is expecting.  If they do not match, then you convert.</p>
 <tr><td></td><td>&amp;#35987;</td><td>&#35987;</td></tr>
 </table>
 
-<p>Note that if you escape something <em>twice</em>, you will escape the escape sequence.  Then you get this:</p>
+<p class="narration">Note that if you escape something <em>twice</em>, you will escape the escape sequence.  Then you get this:</p>
 
-<hr />
+</div><div class="slide">
 
 <table class="signquot chartable">
 <tr><th>Escaped (2x)</th><th>Interpreted as</th></tr>
@@ -179,9 +178,9 @@ are sending them to is expecting.  If they do not match, then you convert.</p>
 <tr><td>&amp;amp;#35987;</td><td>&amp;#35987;</td></tr>
 </table>
 
-<p>You might want to do that if you're talking about HTML syntax in an HTML document.  If you don't want to end up with stuff like this, then you need to keep track of what layers of escaping your text has gone though so you don't over-do it.</p>
+<p class="narration">You might want to do that if you're talking about HTML syntax in an HTML document.  If you don't want to end up with stuff like this, then you need to keep track of what layers of escaping your text has gone though so you don't over-do it.</p>
 
-<hr />
+</div><div class="slide">
 
 <h3>JSON strings</h3>
 
@@ -194,11 +193,11 @@ are sending them to is expecting.  If they do not match, then you convert.</p>
 <tr><td>"&amp;amp;"</td><td>&amp;amp;</td></tr>
 </table>
 
-<p>Same idea here as the table I showed for HTML escapes except here quote and backslash are the escape characters.  This chart also shows what happens when you escape your escape characters, and shows the syntax for representing arbitrary unicode characters up to \uFFFF, which is backslash-U followed by 4 hexadecimal digits.  Similar to HTML, since &#35987; is not an escape character, you could represent it literally in your JSON string, but to do that requires the reader and writer to agree on what charset is being used.  Which ideally they would.</p>
+<p class="narration">Same idea here as the table I showed for HTML escapes except here quote and backslash are the escape characters.  This chart also shows what happens when you escape your escape characters, and shows the syntax for representing arbitrary unicode characters up to \uFFFF, which is backslash-U followed by 4 hexadecimal digits.  Similar to HTML, since &#35987; is not an escape character, you could represent it literally in your JSON string, but to do that requires the reader and writer to agree on what charset is being used.  Which ideally they would.</p>
 
-<p>The next topic is about how to do that.</p>
+<p class="narration">The next topic is about how to do that.</p>
 
-<hr />
+</div><div class="slide">
 
 <h3>Specifing charset of a file served over HTTP</h3>
 
@@ -212,9 +211,9 @@ Content-Type: text/html; <b>charset=utf-8</b>
 &lt;/body&gt;&lt;/html&gt;
 </pre>
 
-<p>Since there's no good way to represent the actual bytes sent on here, I wrote out &#35987; as if it were correctly encoded.  In this case that would mean using UTF-8, because that's what the content-type header said it was going to be.</p>
+<p class="narration">Since there's no good way to represent the actual bytes sent on here, I wrote out &#35987; as if it were correctly encoded.  In this case that would mean using UTF-8, because that's what the content-type header said it was going to be.</p>
 
-<hr />
+</div><div class="slide">
 
 <pre class="signquot">
 HTTP/1.0 200 J00 suxx
@@ -226,9 +225,9 @@ Content-Type: text/html; <b>charset=iso-8859-1</b>
 &lt;/body&gt;&lt;/html&gt;
 </pre>
 
-<p>In this example, the content was still UTF-8 encoded, but the header claimed it was something else.  A program reading the response would therefore interpret our &#35987; character as something goofy, which isn't what we meant.  We could also leave the charset part off of the content-type header completely, in which case the browser would have to guess what character set we were using.  Don't do either of these things if you can help it.</p>
+<p class="narration">In this example, the content was still UTF-8 encoded, but the header claimed it was something else.  A program reading the response would therefore interpret our &#35987; character as something goofy, which isn't what we meant.  We could also leave the charset part off of the content-type header completely, in which case the browser would have to guess what character set we were using.  Don't do either of these things if you can help it.</p>
 
-<hr />
+</div><div class="slide">
 
 <pre class="signquot">
 HTTP/1.0 200 Ima send y'all explanatory hedazzz
@@ -242,11 +241,11 @@ Content-Type: text/html
 &lt;/body&gt;&lt;/html&gt;
 </pre>
 
-<p>Sometimes *ahem*schweser*cough* we don't have a lot of control over what the web server says the character set is, or we might be writing parts of existing pages that might have all sorts of screwed up stuff in them, or storing things into a database with no way to indicate what character set they're encoded in.  In these cases have to assume that the charset is 'US-ASCII', which is kind of a lowest-common-denominator (assuming nobody's using EBCDIC or anything like that).</p>
+<p class="narration">Sometimes *ahem*schweser*cough* we don't have a lot of control over what the web server says the character set is, or we might be writing parts of existing pages that might have all sorts of screwed up stuff in them, or storing things into a database with no way to indicate what character set they're encoded in.  In these cases have to assume that the charset is 'US-ASCII', which is kind of a lowest-common-denominator (assuming nobody's using EBCDIC or anything like that).</p>
 
-<p>But as long as the stuff we're outputting or storing in the database is expected to be HTML or JSON-encoded, we're still able to represent any character we want, by using HTML or JSON escape sequences, respectively.</p>
+<p class="narration">But as long as the stuff we're outputting or storing in the database is expected to be HTML or JSON-encoded, we're still able to represent any character we want, by using HTML or JSON escape sequences, respectively.</p>
 
-<hr />
+</div><div class="slide">
 
 <h4>Assuming output charset=us-ascii...</h4>
 
@@ -257,14 +256,14 @@ Content-Type: text/html
 <tr><th>Text</th><td>The [cat] says "meow"</td></tr>
 </table>
 
-<p>So note here that if we're writing something out as plain text,
+<p class="narration">So note here that if we're writing something out as plain text,
 ASCII-encoded, we simply can't represent that chinese character.
 But we can get around our charset limitation by using escape
 sequences of a higher-level encoding.</p>
 
-<p>Unfortunately, there's no way to force the PHP htmlentities function to take UTF-8 input and escape all non-ASCII characters.  There're some functions that would do things like that floating around the comments section of the page for that function on PHP.net, but I tried one and it was buggy.  We should probably just go ahead and write one.</p>
+<p class="narration">Unfortunately, there's no way to force the PHP htmlentities function to take UTF-8 input and escape all non-ASCII characters.  There're some functions that would do things like that floating around the comments section of the page for that function on PHP.net, but I tried one and it was buggy.  We should probably just go ahead and write one.</p>
 
-<hr />
+</div><div class="slide">
 
 <h3>Summary</h3>
 
@@ -275,12 +274,9 @@ sequences of a higher-level encoding.</p>
 worry about the charset is used to encode your message (as long as it's a superset of ASCII).</li>
 </ul>
 
-<p>I think that about does it.  Any questions?</p>
+<p class="narration">I think that about does it.  Any questions?</p>
 
-<hr />
-<hr />
-<hr />
-<hr />
+</div>
 
 </body>
 </html>

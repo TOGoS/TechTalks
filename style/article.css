@@ -1,32 +1,72 @@
-h1, h2, h3, h4, h5, blockquote.signquot, .signquot, .signquot2 {
-	color: darkred;
-}
-h1, h2, h3, h4, h5, blockquote.signquot, p.signquot, p.signquot2 {
-	text-align: center;
-}
-
-h1 {
-	font-size: 36pt;
-}
-h2, .signquot2 {
-	font-size: 32pt;
-}
-h3 {
-	font-size: 28pt;
-}
-h4, .signquot {
-	font-size: 24pt;
-}
-
-.signquot {
-	margin-left: auto;
-	margin-right: auto;
-}
 .chartable {
 	border-collapse: collapse;
 }
 .chartable td, .chartable th {
-	border: 1px solid darkred;
+	border: 1px solid;
 	padding-left: 1em;
 	padding-right: 1em;
+}
+h1, h2, h3, h4, h5, blockquote.signquot, p.signquot, p.signquot2 {
+	text-align: center;
+}
+.signquot {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+@media screen {
+	h1 {
+		font-size: 36pt;
+	}
+	h2, .signquot2 {
+		font-size: 32pt;
+	}
+	h3 {
+		font-size: 28pt;
+	}
+	h4, .signquot {
+		font-size: 24pt;
+	}
+	h1, h2, h3, h4, h5, blockquote.signquot, .signquot, .signquot2 {
+		color: darkred;
+	}
+	.slide {
+		border-top: 2px groove;
+	}
+}
+
+@media projection {
+	body {
+		background: black;
+		color: white;
+		font-size: 40pt;
+	}
+	.slide {
+		page-break-before: always;
+	}
+	.slide > * {
+		margin-top: auto;
+		margin-bottom: auto;
+	}
+	p.signquot, p.signquot2, h1, h2, h3, h4, h5, h6, table, ul {
+		padding-top: 50pt;
+	}
+	h1 {
+		font-size: 72pt;
+	}
+	h2, .signquot2 {
+		font-size: 64pt;
+	}
+	h3 {
+		font-size: 56pt;
+	}
+	h4, .signquot {
+		font-size: 48pt;
+	}
+	.chartable td, .chartable th {
+		border-color: red;
+	}
+	.narration {
+		display: none;
+	}
 }
