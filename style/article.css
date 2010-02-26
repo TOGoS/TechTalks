@@ -1,3 +1,7 @@
+body {
+	margin: 0;
+	padding: 0;
+}
 .chartable {
 	border-collapse: collapse;
 }
@@ -6,7 +10,11 @@
 	padding-left: 1em;
 	padding-right: 1em;
 }
-h1, h2, h3, h4, h5, blockquote.signquot, p.signquot, p.signquot2 {
+p, table, h1, h2, h3, h4, h5, blockquote {
+	margin: 0.3em;
+	padding: 0.3em;
+}
+h1, h2, h3, h4, h5, blockquote.signquot, p.signquot, p.signquot2, p.signquot3 {
 	text-align: center;
 }
 .signquot {
@@ -18,6 +26,13 @@ h1, h2, h3, h4, h5, blockquote.signquot, p.signquot, p.signquot2 {
 }
 
 @media screen {
+	.slide {
+		padding: 16px 4px;
+		border-top: 2px groove;
+	}
+	.signquot3 {
+		font-size: 72pt;
+	}
 	h1 {
 		font-size: 36pt;
 	}
@@ -30,16 +45,14 @@ h1, h2, h3, h4, h5, blockquote.signquot, p.signquot, p.signquot2 {
 	h4, .signquot {
 		font-size: 24pt;
 	}
-	h1, h2, h3, h4, h5, blockquote.signquot, .signquot, .signquot2 {
+	h1, h2, h3, h4, h5, blockquote.signquot, .signquot, .signquot2, .signquot3 {
 		color: darkred;
-	}
-	.slide {
-		border-top: 2px groove;
 	}
 }
 
 @media print {
 	.slide {
+		padding: 16px;
 		border-top: 1px solid;
 	}
 	img {
@@ -59,11 +72,15 @@ h1, h2, h3, h4, h5, blockquote.signquot, p.signquot, p.signquot2 {
 	.slide {
 		page-break-before: always;
 		padding: 10pt;
+		margin: 0;
 	}
 	.slide > h1, .slide > h2, .slide > h3, .slide > h4, .slide > pre {
 		padding-top: 40pt;
 	}
 	p.signquot, p.signquot2, h1, h2, h3, h4, h5, h6, table, ul {
+	}
+	.signquot3 {
+		font-size: 250pt;
 	}
 	h1 {
 		font-size: 72pt;
