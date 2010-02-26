@@ -21,7 +21,7 @@
 </div><div class="slide">
 
 <blockquote class="signquot">
-<img src="../images/MagrittePipe.jpg" style="width:90%" alt="This is not a pipe"/>
+<img src="../images/MagrittePipe.jpg" style="height:90%" alt="This is not a pipe"/>
 <p class="image-alt">[Pipe]</p>
 </blockquote>
 
@@ -36,7 +36,7 @@
 </div><div class="slide">
 
 <blockquote class="signquot">
-<img src="../images/MagrittePipeClarified.jpg" style="width:90%" alt="The object depicted in this picture is a pipe.  The picture itself is <em>not</em> a pipe."/>
+<img src="../images/MagrittePipeClarified.jpg" style="height:90%" alt="The object depicted in this picture is a pipe.  The picture itself is <em>not</em> a pipe."/>
 <p class="image-alt">[Reworded Pipe]</p>
 </blockquote>
 
@@ -114,8 +114,9 @@ called</p>
 <p class="narration">The next question we need to ask ourselves is: how does the computer represent those numbers?  Keep in mind that the numbers for most characters won't fit in 8 bits, and that sometimes you need certain characters to mean special things, like angle brackets in HTML.  So this problem is a tad more complicated.</p>
 
 <p class="narration">Fortunately, you can still keep things easy simply by being aware of how
-the characters you are working with are encoded, and what format the program you
-are sending them to is expecting.  If they do not match, then you convert.</p>
+the characters in your input and output strings are encoded, and converting when they do not match.
+Common encodings all have nice short names, and most modern programming languages come with functions
+to convert between them.</p>
 
 <p class="narration">So let's start with the simplest case.</p>
 
