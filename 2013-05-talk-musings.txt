@@ -1,0 +1,170 @@
+Tech Talk for May 2013
+
+
+Explanation
+
+I wanted to make a talk about character encodings because
+even though the solution to character encoding problems is
+really simple, most people don't seem to understand what
+they are well enough to apply said solutions and write
+buggy programs that output garbage when emitting text
+that people input by pasting in from Word.
+
+This should be such an embarassment to the company that we fix the problem
+once and for all and never run into it again, especially since it is so easy to fix,
+but apparently Earth IT is not easily embarassed.
+
+Anyway, here's that talk in a nutshell:
+- A character encoding is a mapping between a sequence of bytes and a sequence of characters
+- Keep track of how the character sequences (a.k.a. strings) in your application are encoded,
+  translate them where encodings do not match, and you will not have problems.
+
+Something I had not thought to mention when I wrote that talk 2 years ago
+that occurs to me now is that our tools (databases, string objects) should
+do this tracking for us, but for some reason our company likes to use ones
+that don't.
+- PHP strings have no notion of encoding and and every built-in function
+  follows different encoding conventions, leaving the job of ensuring proper handling
+  to the programmer.
+- MySQL's system for indicating encodings is overcomplicated and
+  doesn't seem to automatically convert or give errors in situations where it should.
+
+Therefore the job of making sure text is handled properly falls to the programmers,
+and we usually don't do it, leading to subtle bugs.
+
+But lack of specificity with regard to how strings are encoded is only one
+aspect of a much larger problem, which is lack of specificity in general.
+
+But there's a more general theme that I wanted to talk about, which is that
+
+
+
+
+
+
+
+
+
+
+
+
+Be Precise and Don't Repeat Yourself:
+How to Talk to Computers
+
+or
+
+Be Explicit:
+English is full of ambiguities.
+Your programs should not be.
+
+
+
+Examples of imprecise code.
+	Badly-named variables
+		e.g. $controller->request->headers in Kohana are actually *response* headers
+	Unspecified types
+		e.g. Most PHP code
+	Unspecified pre/post conditions
+		e.g. Most code written in imperative languages
+	Unspecified character encodings
+		e.g. Pretty much all code written in PHP[PHPCharsets]
+		
+	Modelling your problem wrong
+		Modeling solutions that are not inherently procedural
+		in terms of procedural code makes the problem *more*
+		complicated.
+
+		This is why MVC frameworks like Kohana are such shit.[KohanaDesign]
+		Instead of spending effort solving the problem at hand,
+		you spend it re-mapping the problem to procedural code.
+	
+Tell other programmers what you mean
+	Program should match your domain model
+	- WebRequestHandler = WebRequest -> WebResponse
+		instead of controller.route, controller.fetch, ...whatever
+		(most languages have functions; people just don't know how to use them)
+	Descriptive names
+	- why does someone want to call your method?
+	Explanatory comments
+	- what cases does your function handle?
+	- What encoding must this string have?	(e.g. json_decode)
+	
+	This is better than nothing, but the computer cannot automatically check things for you
+
+Tell the computer what you mean
+	Strong, static typing
+	Assertions
+	Explicitly pass relevant information at compile or run-time.
+	- encoded strings should define their encoding
+	- Java Strings hold character arrays and must be explictly converted <-> byte arrays
+	- Perl 6 and (I think) Ruby >= 1.9 strings know their encoding at run-time and
+		convert themselves as required.	As in Java, the programmer must explicitly select
+		an encoding when converting <-> byte arrays
+	
+	Choice of language strongly influences how much information you can give the computer.
+
+	In a language with good facilities for compile-time checks, you can
+	be reasonably confident that your program is correct by the fact that
+	it compiles.
+	
+	Example: TOPS map service refactoring
+	- Spent several hours refactoring.	Once Eclipse was happy, I tested and everything worked.
+	- In PHP the computer would not have been able to help me refactor
+		Nor would it have been able to tell me about certain obvious problems
+		The same refactoring would have taken several days, or in order to avoid refactoring
+		I would have hacked in some small but hacky change, leaving more opportunity for bugs.
+	
+	Ambiguity leads to bugs
+	Programming in a functional style reduces ambiguity.
+	It also tends to cut down on amount of code needed to solve a problem,
+	which reduces opportunity for bugs
+
+Examples of repetitious code
+
+
+
+
+
+Notes
+
+PHPCharsets:
+
+	The PHP language doesn't say anything about character encodings,
+	and as far as I can tell the manual doesn't provide any standard
+	conventions for using them.  Different built-in functions expect
+	different encodings, and making sure that a string uses the correct
+	encoding is left entirely to the programmer of the application.
+	
+	Most PHP developers are either completely oblivious to the existence
+	of character encodings or misunderstand what they are (Dmitry's
+	course importer code provides a good example of the latter problem).
+	Their resulting programs only happen to
+	
+
+KohanaDesign:
+
+	These frameworks are designed the way they are not because it is
+	a good design but because the people who build them are so used
+	to programming in an imperative way that the thought of modelling
+	e.g. a request -> response handler as a function simply doesn't
+	occur to them.
+
+[SESeminar]
+
+	In college I gave a presentation for a Software Engineering seminar class.
+	
+	The main points ended up being:
+	
+	- The primary purpose of programming as a hobby should not be to make
+	  something cool or useful (though that is a nice side-effect), but to
+	  learn to program better (which itself has the side-effect that when
+	  you do need to program to get something done, you'll be that much
+	  more effective at it).
+	
+	- High-level programming languages can drastically increase programmer
+	  productivity because the brain resources that you would otherwise
+	  spend understanding low-level details can be reallocated to modelling
+	  and solving your problem.
+	
+	It surprises me how often my realizations about programming relate directly
+	back to what I said in that talk.
