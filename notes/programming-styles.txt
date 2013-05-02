@@ -1,0 +1,142 @@
+See http://en.wikipedia.org/wiki/Comparison_of_programming_paradigms
+
+
+
+## Programming Paradigms
+
+### Functional
+
+Program defines a function as explicit transformations on an
+explicitly defined set of inputs to produce the program's result.
+
+Languages:
+- Haskell
+
+
+
+### Constraint-based
+
+Program is defined as constraints on inputs and (sometimes)
+transformations to be applied to them.
+
+Generally includes a lot of functional code to define constraints and
+transformations.
+
+Languages:
+- SQL
+- XLink
+- Map/reduce systems
+- Prolog
+- OGNL tries to be this with Java-derived syntax
+
+
+
+### Data-flow
+
+input -> process A -> process B -> process C -> output
+
+Processes can be run in parallel
+Processes can take (potentially infinite) streams of unputs
+
+Languages:
+- Unix shells
+
+
+
+### Event-based
+
+on <event> do <something>
+
+Program is defined as a state machine where events may
+transition it from one state to another.
+
+Languages:
+- Node.js
+
+Applicable situations:
+- Long running programs that need to respond to 
+- Network servers
+
+
+
+### Component-based
+
+Program is a set of components that operate concurrently and interact
+by sending each other messages.  Each component runs a program that
+may be written in any of the other styles, though event-based and data
+flow-based fit most naturally.
+
+
+
+### Imperative/Procedural
+
+do-operation-X
+do-operation-Y
+
+Program is a series of instructions that operate on an
+implicitly-defined program state, and can be mapped relatively
+directly to an assembly program.
+
+Many programmers write code this way even when using higher-level languages.
+
+Every program must be compiled to or be interpreted by a procedural
+program in order for it to actually interact with the world, as this
+is what hardware understands.
+
+In procedural languages, all abstractions towards other paradigms are
+left up to the programmer.  They are possible but not enforced.
+
+'Structured' and 'object-oriented' programming techniques usually fall
+under the 'imperative' paradigm.
+
+Languages:
+- Assembly
+
+
+
+
+
+## Non-paradigms
+
+### Object-orented
+
+Object-oriented is more of a way to structure programs than a paradigm
+in itself.  Objects can encapsulate code that follows any of the other
+paradigms.  Most OO languages are actually procedural in nature, as
+their programs define a sequence of operations to be executed one
+after another, and objects do not abstract this fact away.
+
+'Paul Graham has suggested that the purpose of OOP is to act as a
+"herding mechanism" that keeps mediocre programmers in mediocre
+organizations from "doing too much damage". This is at the expense of
+slowing down productive programmers who know how to use more powerful
+and more compact techniques.' [Wikipedia](http://en.wikipedia.org/wiki/Object-oriented_programming#Criticism)
+
+
+
+## Adapters
+
+Programs may be written using multiple styles.
+
+It is usually simple to embed functional programs within programs
+written with other styles.  Other times an explicit adapter must be
+written.  e.g. procedural languages usually have a way to call
+functions, but in order to call procedural, data flow-based, or
+event-based code from a functional language you would need to wrap it
+up so it appears as a function, e.g.
+
+  function foo( x, y, z ) {
+    proc = new VirtualProcessor()
+    proc.doSomething(x)
+    proc.doSomething(y)
+    proc.doSomething(z)
+    return proc.getResult()
+  }
+
+### Leaky adapters
+
+Problems arise when things that look like pure functions have
+important side-effects or depend on context.  You must be careful when
+using such functions, which is why it is a good idea to write as much
+of your program as side-effect free, context-agnostic functions as
+possible.

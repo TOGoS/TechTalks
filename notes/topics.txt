@@ -1,0 +1,4 @@
+SchemaSchema
+Character encodings
+Programming paradigms
+Good naming conventions
