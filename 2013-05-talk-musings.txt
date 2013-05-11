@@ -1,21 +1,21 @@
-Tech Talk for May 2013
+# Tech Talk for May 2013
 
+## Intro
 
-Explanation
+I wanted to make a talk about character encodings because even though
+the solution to character encoding problems is really simple, most
+people don't seem to understand what they are well enough to apply
+said solutions, so they go and write buggy programs that output
+garbage when emitting text that people input by pasting in from Word.
 
-I wanted to make a talk about character encodings because
-even though the solution to character encoding problems is
-really simple, most people don't seem to understand what
-they are well enough to apply said solutions and write
-buggy programs that output garbage when emitting text
-that people input by pasting in from Word.
-
-This should be such an embarassment to the company that we fix the problem
-once and for all and never run into it again, especially since it is so easy to fix,
-but apparently Earth IT is not easily embarassed.
+This should be such an embarassment to the company that we fix the
+problem once and for all and never run into it again, especially since
+it is so easy to fix, but apparently Earth IT is not easily
+embarassed.
 
 Anyway, here's that talk in a nutshell:
-- A character encoding is a mapping between a sequence of bytes and a sequence of characters
+- A character encoding is a mapping between a sequence of bytes and a
+  sequence of characters (and vice-versa)
 - Keep track of how the character sequences (a.k.a. strings) in your application are encoded,
   translate them where encodings do not match, and you will not have problems.
 
@@ -35,23 +35,21 @@ and we usually don't do it, leading to subtle bugs.
 But lack of specificity with regard to how strings are encoded is only one
 aspect of a much larger problem, which is lack of specificity in general.
 
-But there's a more general theme that I wanted to talk about, which is that
+But there's a more general theme that I wanted to talk about, which is
+that if you tell the computer in precise terms what you want it to do,
+you will be a much more effective programmer.  Your programs will have
+fewer bugs, they will run faster, and they will be more
+understandable, and you will be able to adapt them to changing
+requirements more quickly.
 
 
 
 
 
-
-
-
-
-
-
-
-Be Precise and Don't Repeat Yourself:
+## Be Precise and Don't Repeat Yourself:
 How to Talk to Computers
 
-or
+Or:
 
 Be Explicit:
 English is full of ambiguities.
@@ -59,112 +57,161 @@ Your programs should not be.
 
 
 
-Examples of imprecise code.
-	Badly-named variables
-		e.g. $controller->request->headers in Kohana are actually *response* headers
-	Unspecified types
-		e.g. Most PHP code
-	Unspecified pre/post conditions
-		e.g. Most code written in imperative languages
-	Unspecified character encodings
-		e.g. Pretty much all code written in PHP[PHPCharsets]
+### Examples of imprecise code.
+
+Badly-named variables
+	e.g. $controller->request->headers in Kohana are actually *response* headers
+Unspecified types
+	e.g. Most PHP code
+Unspecified pre/post conditions
+	e.g. Most code written in imperative languages
+Unspecified character encodings
+	e.g. Pretty much all code written in PHP[Character Encoding in PHP]
 		
-	Modelling your problem wrong
-		Modeling solutions that are not inherently procedural
-		in terms of procedural code makes the problem *more*
-		complicated.
+Modeling solutions that are not inherently procedural in terms of
+procedural code makes the problem *more* complicated.
 
-		This is why MVC frameworks like Kohana are such shit.[KohanaDesign]
-		Instead of spending effort solving the problem at hand,
-		you spend it re-mapping the problem to procedural code.
+This is why MVC frameworks like Kohana are such shit.[Kohana Design]
+Instead of spending effort solving the problem at hand, you spend it
+re-mapping the problem to procedural code.
+
+
+### Tell other programmers what you mean
+
+Write your program in such a way that the code maps neatly
+to your problem domain.
+- e.g. a web request handler could be modelled as
+  WebRequestHandler = WebRequest -> WebResponse
+  instead of controller.route, controller.fetch, etc.
+  (most languages have functions; people just don't know how to use them)
+
+Descriptive names
+- Why does someone want to call your method?
+  In most high-level programs, this should be obvious from its name.
+
+Explanatory comments
+- What range of inputs does a function handle?
+- What should the state of an object be before and after a given
+  method is called?
+- What encoding is a string assumed to have?
+  (e.g. those passed to json_decode)
+
+Good naming and comments are better than nothing, but using only
+those, the computer cannot automatically check things for you.
+
+
+### Tell the computer what you mean
+
+Strong, static typing serves as documentation for other programmers
+and for the compiler about what information your program is handling.
+
+Assertions serve as documentation to both programmers and the compiler
+about what the state of the program is expected to be at certain
+points.
+
+Explicitly pass relevant information at compile or run-time.
+- encoded strings should define their encoding
+- Java Strings hold character arrays and must be explictly converted <-> byte arrays
+- Perl 6 and (I think) Ruby >= 1.9 strings know their encoding at run-time and
+  convert themselves as required.  As in Java, the programmer must explicitly select
+  an encoding when converting <-> byte arrays
+
+Choice of language strongly influences how much information you can give the computer.
+
+In a language with good facilities for compile-time checks, you can be
+reasonably confident that your program is correct by the fact that it
+compiles.
 	
-Tell other programmers what you mean
-	Program should match your domain model
-	- WebRequestHandler = WebRequest -> WebResponse
-		instead of controller.route, controller.fetch, ...whatever
-		(most languages have functions; people just don't know how to use them)
-	Descriptive names
-	- why does someone want to call your method?
-	Explanatory comments
-	- what cases does your function handle?
-	- What encoding must this string have?	(e.g. json_decode)
+Example: TOPS map service refactoring
+
+- I spent several hours refactoring, and once once Eclipse indicated
+  that the program was correct as far as it could tell, I tested and
+  everything worked.  The same refactoring would have taken days or
+  been imposible in a language that did not allow compile-time checks.
 	
-	This is better than nothing, but the computer cannot automatically check things for you
+Ambiguity leads to bugs.
+Programming in a functional style reduces ambiguity.
+It also tends to cut down on amount of code needed to solve a problem,
+which reduces opportunity for bugs
 
-Tell the computer what you mean
-	Strong, static typing
-	Assertions
-	Explicitly pass relevant information at compile or run-time.
-	- encoded strings should define their encoding
-	- Java Strings hold character arrays and must be explictly converted <-> byte arrays
-	- Perl 6 and (I think) Ruby >= 1.9 strings know their encoding at run-time and
-		convert themselves as required.	As in Java, the programmer must explicitly select
-		an encoding when converting <-> byte arrays
+
+
+
+
+## Footnotes
+
+### Character Encoding in PHP
+
+The PHP language doesn't say anything about character encodings, and
+as far as I can tell the manual doesn't provide any standard
+conventions for using them.  Different built-in functions expect
+different encodings, and making sure that a string uses the correct
+encoding is left entirely to the programmer of the application.
 	
-	Choice of language strongly influences how much information you can give the computer.
-
-	In a language with good facilities for compile-time checks, you can
-	be reasonably confident that your program is correct by the fact that
-	it compiles.
-	
-	Example: TOPS map service refactoring
-	- Spent several hours refactoring.	Once Eclipse was happy, I tested and everything worked.
-	- In PHP the computer would not have been able to help me refactor
-		Nor would it have been able to tell me about certain obvious problems
-		The same refactoring would have taken several days, or in order to avoid refactoring
-		I would have hacked in some small but hacky change, leaving more opportunity for bugs.
-	
-	Ambiguity leads to bugs
-	Programming in a functional style reduces ambiguity.
-	It also tends to cut down on amount of code needed to solve a problem,
-	which reduces opportunity for bugs
-
-Examples of repetitious code
-
-
-
-
-
-Notes
-
-PHPCharsets:
-
-	The PHP language doesn't say anything about character encodings,
-	and as far as I can tell the manual doesn't provide any standard
-	conventions for using them.  Different built-in functions expect
-	different encodings, and making sure that a string uses the correct
-	encoding is left entirely to the programmer of the application.
-	
-	Most PHP developers are either completely oblivious to the existence
-	of character encodings or misunderstand what they are (Dmitry's
-	course importer code provides a good example of the latter problem).
-	Their resulting programs only happen to
+Most PHP developers are either completely oblivious to the existence
+of character encodings or misunderstand what they are (Dmitry's course
+importer code provides a good example of the latter problem).  Their
+resulting programs only happen to
 	
 
-KohanaDesign:
+### Kohana Design
 
-	These frameworks are designed the way they are not because it is
-	a good design but because the people who build them are so used
-	to programming in an imperative way that the thought of modelling
-	e.g. a request -> response handler as a function simply doesn't
-	occur to them.
+These frameworks are designed the way they are not because it is a
+good design but because the people who build them are so used to
+programming in an imperative way that the thought of modelling e.g. a
+request -> response handler as a function simply doesn't occur to
+them.
 
-[SESeminar]
+The whole point of a 'framework' is to provide a conventional way to
+structure things to be interoperable when that convention would
+otherwise be lacking.  In that light, Kohana isn't a very useful
+framework because the convention it prescribes for writing components
+is arguably *worse* than the conventions that one would naturally
+follow writing PHP code without Kohana.
 
-	In college I gave a presentation for a Software Engineering seminar class.
+A good framework should be designed around simple, open standards so
+that components can be added without having to wrap them in an adapter
+to fit them into the framework.
+- The API changes from version to version
+  (it's also a crappy API for other reasons, but 
+- I've been told that the documentation is awful.  I can't confirm
+  this because I have never been able to find any that applied to
+  the version we're using.
+- The way that controllers, actions, and views interact is highly
+  stateful and therefore hard to extend.  Programming Kohana
+  controllers, one spends a lot of time writing boilerplate code to
+  make sure instance variables are initialized correctly, even though
+  the language already provides a much more concise and less
+  error-prone way to do the same thing (by using constructors and
+  return values).
+- It uses a non-standard naming convention; classes are not namespaced
+  (as if the class name "DB" is completely unambiguous) and scattered
+  through an overly complex folder structure, making it hard to tell
+  what things are part of the framework, what are extensions, and what
+  are project-specific (I'm guessing the purpose of the
+  'overcomplicated folder structure' is to make this more obvious, but
+  that's defeated by our practice of copying previous projects to
+  start new ones (should we call that the Dmitry approach?), which
+  leads to ambiguously-named classes scattered everywhere that nobody
+  really knows the purpose of or whether they ought to use them at
+  all.
+
+### SE Seminar
+
+In college I gave a presentation for a Software Engineering seminar class.
 	
-	The main points ended up being:
-	
-	- The primary purpose of programming as a hobby should not be to make
-	  something cool or useful (though that is a nice side-effect), but to
-	  learn to program better (which itself has the side-effect that when
-	  you do need to program to get something done, you'll be that much
-	  more effective at it).
-	
-	- High-level programming languages can drastically increase programmer
-	  productivity because the brain resources that you would otherwise
-	  spend understanding low-level details can be reallocated to modelling
-	  and solving your problem.
-	
-	It surprises me how often my realizations about programming relate directly
-	back to what I said in that talk.
+The main points ended up being:
+
+- The primary purpose of programming as a hobby should not be to make
+  something cool or useful (though when it happens that is a nice
+  surprise side-effect), but to learn to program better (which itself
+  has the side-effect that when you do need to program to get
+  something done, you'll be much more effective at it).
+
+- High-level programming languages can drastically increase programmer
+  productivity because the brain resources that you would otherwise
+  spend understanding low-level details can be reallocated to modelling
+  and solving your problem.
+
+It surprises me how often I make these realizations again, only to
+remember that I had already figured them out 8 years ago.
