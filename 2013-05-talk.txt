@@ -1,0 +1,27 @@
+## Talks I wanted to give
+
+Be Precise and Don't Repeat Yourself:
+How to Talk to Computers
+
+---
+Be Explicit:
+English is full of ambiguities.
+Your programs should not be.
+
+---
+This is Not a Character:
+The Treachery of Byte Sequences
+
+
+Those talks would have been all about how to write code such that it
+more clearly expresses your intentions to the computer and to other
+programmers and how doing that makes your job as a programmer much
+easier and helps you write programs that are more efficient and have
+fewer bugs.
+
+I would have pointed out how strongly typed languages help you do this
+and how PHP and Kohana go out of their way to make it difficult.
+
+But I don't have time for that talk, so instead I'm going to talk about
+
+# SchemaSchema
