@@ -3,13 +3,25 @@
 I argue that:
 
 By writing programs in terms of what to do rather than how to do them,
-your programs will be have fewer bugs, easier to maintain, probably mor
-efficient, and if not more efficient, easier to optimize so that they are.
+your programs will be less buggy, easier to maintain, probably more
+efficient, and if not more efficient, easier to optimize so that they
+are.
 
-## Quick example
+Of course at some level you will need to tell the computer how to do
+things, but by designing your APIs in terms of 'what' and
+encapsulating the 'how' within function and object implementations,
+your overall program structure will better represent the goal of the
+program.
+
+
+
+## Example: Contrived Controller Class
 
 Server code for a simple web site that says "Hello, <name>" when you go to
 /hello, "Goodbye, <name>" for any other URL.
+
+A typical controller class for a PHP MVC framework might look
+something like this:
 
     class SomethingController {
       var $request;
@@ -30,31 +42,34 @@ Server code for a simple web site that says "Hello, <name>" when you go to
       }
     }
 
-Problems:
-- Not obvious how to provide alternate response codes
-- To understand what the code is doing, need to make assumptions
+There are some problems with the way this class is written:
+- It's not obvious how to provide alternate response codes
+- To understand what the code is doing, you need to make assumptions
   about how it's called and track side-effects in your head
-  - e.g. what request and response are
-  - at what point in the code are the various instance variables
-    set to the value you want
-- Controller object holds state for a single request/response, so
+  - e.g. what are request and response, and when do they get
+    initialized? (This code implies that the framework is doing
+    this 'for you' at some point.)
+  - At what point in the code are the various instance variables
+    set to the value you want?
+- The controller object holds state for a single request/response, so
   cannot be re-used (that it won't be requires another assumption
   about the environment)
 - Chunks of code could be left out and the program would still be
   syntactically correct but wrong.
 
-Better solution:
+Here's a better solution:
 
     class SomethingRequestHandler {
       function handleRequest( Request $request ) {
         return new Response( 200,
-          ($request->pathInfo == '/hello' ? "Hello" : "Goodbye") . ', ' .
+          ($request->pathInfo == '/hello' ? "Hello" : "Goodbye") .
+          ', ' .
           $request->getParameterValue('name') );
       }
     }
 
 This is a more direct mapping of our requirements to code, so it's more
-understandable.  It's also better code for other reasons.
+understandable.  It's also better code for other reasons:
 - Since the controller is stateless and the $request, there's no room for
   the handleRequest method to be called incorrectly.
 - Taking advantage of simple language features (function parameters and
@@ -62,8 +77,8 @@ understandable.  It's also better code for other reasons.
   means other programmers can read and understand the code with less
   effort.
 - By defining the request handler as a function, we are more clearly
-  modeling our solution.  After all, the response is _a function of_
-  the request.
+  modeling our solution.  After all, the response is ny definition
+  _a function of_ the request.
 
 Even better, use a language with static typing a decent compiler:
 
@@ -92,7 +107,24 @@ have taken weeks and probably left subtle bugs all over if the code I
 was working on had been written in a language without compile-time checks
 (such as PHP).
 
-## Git
+Note: Java isn't perfect.  For one thing, I wish parameters could be
+marked as not allowed to be null (there are various annotations for
+this but not a standard way built into the language).  Rust looks
+promising.
+
+
+
+### Tips for good class design
+
+- Write unit tests.  Aside from the obvious benefits of having unit
+  tests, designing classes to be unit-testable often results in a
+  more straightforward design.
+- Don't use instance variables when function parameters would suffice.
+  http://www.nuke24.net/docs/2012/InstanceVariableMisuse.html
+
+
+
+## Example: Git
 
 Git is a good version control system because it explicitly models the
 relationship between versions your project.
@@ -102,7 +134,9 @@ and edges point to parent commits.  This core model says nothing about
 servers or authentication mechanisms and because of this decoupling
 it a much more robust system than, say, subversion.
 
-- You can duplicate repositories willy-nilly without
+- You can move and duplicate repositories willy-nilly without worrying
+  too much about synchronization or making people update their remotes
+  repository references all at once.
 - Branches are free.  You can work on your own without
   pulling or pushing changes for a few days, and if someone else does
   work from the same start point, you've each made an anonymous branch.
@@ -112,7 +146,7 @@ it a much more robust system than, say, subversion.
 - This model also allows merging to be done automatically.
   Since git explicitly tracks parent commits, it can walk the
   commit history to find a the first common ancestor commit and
-  only apply changes after that point, so 
+  only apply changes after that point.
 
 The reason Git is successful is because it separates the data model
 from how the data is managed, which makes the model simpler, which
@@ -124,24 +158,27 @@ that our projects can benefit from, too.  And to some extent we
 already do this when we start a project by designing the database
 first.  Relational databases happen to be pretty good at modelling the
 kind of data that our projects work with.  If your project involves
-the concept of a user, a product, a shopping cart, a hospitalization
-diagnosis, chances are there will be tables in the database with those
-same names, and their relation to their corresponding real-world
-object or abstract concept will be very obvious.
+the concept of a user, a product, a shopping cart, and a
+hospitalization diagnosis, chances are there will be tables in the
+database with those same names, and their relation to their
+corresponding real-world object or abstract concept will be very
+obvious.
 
-Question for the audience: Why aren't the objects in our
-PHP/JavaScript code as obvious and easily understandable as our
-database schemas?
+Why aren't the objects in our PHP/JavaScript code as obvious and
+easily understandable as our database schemas?
 
 I think they can be if you write your program in such a way that your
 code maps directly to your ideas.  In my experience sticking to
 immutable data structures and modelling functions as functions helps a
 lot.  But that's for a different talk.  So is character encodings.
 
-## SchemaSchema
+
+
+## Example: SchemaSchema
 
 SchemaSchema is a language for declaring your data model and a Java
-library that interprets it.  Here's an example from First30:
+library that interprets it.  I use it to generate code for First30.
+Here's some example schema:
 
     resource class 'provider type' : scope @ constant {
         provider type code : string : key(primary)
