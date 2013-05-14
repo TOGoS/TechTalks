@@ -278,9 +278,12 @@ sequences of a higher-level encoding.</p>
 
 <ul class="signquot">
 <li>Keep track if I/O charsets and you will not have character problems.</li>
+
 <li>UTF-8 is a good choice if you want to be able to represent any unicode character.</li>
-<li>When using HTML or JSON you can represent non-ASCII characters without having to
-worry about the charset is used to encode your message (as long as it's a superset of ASCII).</li>
+
+<li>When using HTML or JSON you can represent non-ASCII characters
+using (respectively) HTML or JSON escape sequences to get around lack
+of control over the the underlying encoding.</li>
 </ul>
 
 <p class="narration">I think that about does it.  Any questions?</p>
