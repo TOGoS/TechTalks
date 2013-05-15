@@ -51,8 +51,8 @@ There are some problems with the way this class is written:
   - At what point in the code are the various instance variables
     set to the value you want?
 - The controller object holds state for a single request/response, so
-  cannot be re-used (that it won't be requires another assumption
-  about the environment)
+  cannot be re-used while that request is being handled.  That it won't
+  be is yet another assumption about the environment.
 - Chunks of code could be left out and the program would still be
   syntactically correct but wrong.
 
@@ -82,10 +82,10 @@ understandable.  It's also better code for other reasons:
 Even better, use a language with static typing a decent compiler:
 
     class SomethingRequestHandler {
-      Response handleRequest( Request req ) {
+      Response handleRequest( Request request ) {
         return new Response( 200,
-          (req.pathInfo == "/hello" ? "Hello" : "Goodbye") + ", " +
-          req.getParameterValue("name") );
+          (request.pathInfo == "/hello" ? "Hello" : "Goodbye") + ", " +
+          request.getParameterValue("name") );
       }
     }
 
@@ -108,8 +108,9 @@ was working on had been written in a language without compile-time checks
 
 Note: Java isn't perfect.  For one thing, I wish parameters could be
 marked as not allowed to be null (there are various annotations for
-this but not a standard way built into the language).  Rust looks
-promising.
+this but not a standard way built into the language).  Rust is a promising-
+-looking language that's designed to help you write safe/correct code
+while giving useful high-level constructs like anonymous functions.
 
 
 
@@ -166,10 +167,21 @@ obvious.
 Why aren't the objects in our PHP/JavaScript code as obvious and
 easily understandable as our database schemas?
 
-I think they can be if you write your program in such a way that your
-code maps directly to your ideas.  In my experience sticking to
-immutable data structures and modelling functions as functions helps a
-lot.  But that's for a different talk.  So is character encodings.
+I think they can be if program are written in such a way that the
+structures in the program (functions, data structures, APIs) map
+directly to the concepts in the problem your program is solving.
+
+In my experience, sticking to immutable data structures, modelling
+functions as functions, and test-driven development help a lot.  But
+those techniques are for a different talk.  So is character encodings,
+though understanding character encodings also ties pretty directly
+into the theme of being precise in order to build more flexible and
+reliable software.
+
+Anyway, the most important step to take in structuring programs well
+is to _fully understand the problem you're trying to solve_ before you
+go and write a bunch of code (or download a library that supposedly
+solves problems similar to yours).
 
 
 
