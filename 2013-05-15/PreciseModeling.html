@@ -1,20 +1,38 @@
 <html>
 <head>
 <title>Be Precise and Don't Repeat Yourself: How to Talk to Computers</title>
+<style>
+h1 {
+	text-align: center;
+}
+
+@media print {
+	body {
+		font-size: small;
+	}
+}
+</style>
 </head>
 <body>
 
+<h1>Be Precise and Don't Repeat Yourself: <br/>
+<small>How to Talk to Computers</small></h1>
+
+<p>(Or, rather, as much of that talk as I can cram into 30 minutes and
+3 loosely-related examples, one of which necessarily being
+SchemaSchema, since that's what everyone's expecting me to talk
+about)</p>
+
 <p>I submit that:</p>
 
-<p>By writing programs in terms of what to do rather than how to do
-them, your programs will be less buggy, easier to maintain, probably
+<p>By writing programs in terms of what to get done rather than how to
+do it, your programs will be less buggy, easier to maintain, probably
 more efficient, and if not more efficient, easier to optimize.</p>
 
-<p>Of course at some level you will need to tell the computer how to
-do things, but by designing your APIs in terms of 'what' and
-encapsulating the 'how' within function and object implementations,
-your overall program structure will better represent the goal of the
-program.</p>
+<p>Of course at some level someone needs to tell the computer how to
+do things, but by designing APIs in terms of 'what' and encapsulating
+the 'how' within function and object implementations, your overall
+program structure will better represent the goal of the program.</p>
 
 
 
@@ -51,25 +69,34 @@ something like this:</p>
 <p>The way this code is written leads to several potential problems</p>
 
 <ul>
-<li>It's not obvious how to (for example) provide alternate response codes</li>
 <li>To understand what the code is doing, you need to make assumptions
   about how it's called and track side-effects in your head.  E.g.:<ul>
-  <li>What are request and response, and when do they get
-    initialized? (The above code implies that the framework is doing
-    this 'for you' at some point.)</li>
+  <li>What are request and response, and when do they get initialized?
+    The above code implies that the framework is doing this 'for you'
+    at some point, but what if you wanted to
+    call <code>handleRequest</code> yourself?</li>
   <li>At what point in the code are the various instance variables
     set to the value you want?</li>
 </ul></li>
-
+<li>Since the types of <code>$request</code>
+  and <code>$response</code> are not specified, it's not obvious how
+  to (for example) provide alternate response codes.</li>
 <li>The controller object holds state for a single request/response,
   so cannot be re-used while that request is being handled.  That it
   won't be is yet another assumption about the environment.</li>
-
 <li>Chunks of code could be left out and the program would still be
-  syntactically correct but wrong, indicating that this program cannot
-  be easily checked for correctness.</li>
-
+  syntactically correct but not function, indicating that this program
+  cannot be easily checked for correctness.</li>
 </ul>
+
+<p>I suspect a lot of design decisions for these types of frameworks
+are made the way they are in order to simplify the syntax (perhaps by
+making it look more like English) of your classes at the expense of
+added complexity to the semantics.  For this approach to be beneficial
+would require that programmers using the framework are so unskilled
+that they don't fully understand the language that they are writing
+in, and that the programs they write are so simple that they never
+need to do anything not envisioned by the framework designer.</p>
 
 <p>Here's a better solution:</p>
 
@@ -77,8 +104,7 @@ something like this:</p>
     class SomethingRequestHandler {
       function handleRequest( Request $request ) {
         return new Response( 200,
-          ($request-&gt;pathInfo == '/hello' ? "Hello" : "Goodbye") .
-          ', ' .
+          ($request-&gt;pathInfo == '/hello' ? "Hello" : "Goodbye") . ', ' .
           $request-&gt;getParameterValue('name') );
       }
     }
@@ -88,9 +114,9 @@ something like this:</p>
 understandable.  It's also better code for other reasons:</p>
 
 <ul>
-<li>Since the controller is stateless and the $request is declared to
-  be a Request object, there's no room for the handleRequest method to
-  be called incorrectly.</li>
+<li>Since the controller is stateless and the <code>$request</code> is
+  declared to be a Request object, there's no room for the
+  handleRequest method to be called incorrectly.</li>
 <li>Taking advantage of simple language features (function parameters and
   return values, in this case) cuts down on boilerplate code, which
   means other programmers can read and understand the code with less
@@ -106,7 +132,7 @@ compiler:</p>
 
 <blockquote><pre>
     class SomethingRequestHandler {
-      Response handleRequest( Request request ) {
+      public Response handleRequest( Request request ) {
         return new Response( 200,
           (request.pathInfo == "/hello" ? "Hello" : "Goodbye") + ", " +
           request.getParameterValue("name") );
