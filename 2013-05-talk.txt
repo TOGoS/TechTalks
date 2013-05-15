@@ -209,16 +209,20 @@ use them over and over.  If the definitions change (e.g. a user ID
 used to be represented as a 32-bit integer but now it needs to be 64
 bits) you can simply change the definition and re-generate your table
 creation SQL.  If you need to upgrade your database, you can use
-SchemaSchema to find all columns of type 'user ID' and 
+SchemaSchema to find all columns of type 'user ID' and write the
+appropriate ALTER TABLE statements.
 
 SchemaSchemas can also declare things about your schema that aren't
 limited to how it's represented in the database.  E.g. you can
 indicate how certain values should be encoded in JSON or PHP.  In
-First30 we have various scopes, and the SchemaSchema document
+First30 we have various object 'scopes', and the SchemaSchema document
 indicates the scope for each table, allowing us to auto-generate data
-used by the permission checking functions.
+used by the permission checking functions and service tests.
 
 It also serves as documentation that's more easily readable than your
 table creation SQL.
 
-TODO: say more stuff
+
+
+At this point, the SchemaSchemaDemo should be shown, and then a tour
+of the First30 schema.txt and some generated code.
