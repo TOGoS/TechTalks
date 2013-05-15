@@ -4,8 +4,7 @@ I argue that:
 
 By writing programs in terms of what to do rather than how to do them,
 your programs will be less buggy, easier to maintain, probably more
-efficient, and if not more efficient, easier to optimize so that they
-are.
+efficient, and if not more efficient, easier to optimize.
 
 Of course at some level you will need to tell the computer how to do
 things, but by designing your APIs in terms of 'what' and
