@@ -14,7 +14,16 @@ Approaches to doing side effects with pure functions:
 Haskell takes the latter approach.
 
 Why is Haskell hard?
+  
+  The interactive interpreter can evaluate expressions but you can't
+  define types with it, which might lead you to believe you're getting
+  the syntax wrong when actually you just need to put it in a file and
+  compile it non-interactively.  e.g.
 
+    Prelude> type CoolAliasForInt = Int
+
+    <interactive>:1:0: parse error on input `type'
+  
   how can you do anything if functions have no side-effects?
   
     Functions don't have side-effects (except for special cases like 'debug')
@@ -67,3 +76,19 @@ Why is Haskell hard?
     
     -- will work:
     type D00D = String
+  
+  What is that double arrow thing?
+
+  It's a way to specify type constraints.
+ 
+    SomeClass x => x
+  
+  means any type 'x' (the thing on the right) such that x is an
+  instance of the SomeClass class.  (classes are a bit like interfaces
+  in Java).
+
+Haskell makes certain design patterns really really easy.
+
+  e.g. the 'figure out what to do, then do it' pattern (that's how IO works in Haskell)
+  
+  or the state machine pattern (actions act like state machines)
