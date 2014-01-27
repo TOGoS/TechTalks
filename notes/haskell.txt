@@ -1,0 +1,94 @@
+Approaches to doing side effects with pure functions:
+
+- functions take the entire world as input and produce a new world
+  
+  Later functions depend on result of earlier functions, so earlier
+  functions must be evaluated first.
+  
+  Downside: implies that a snapshot of the world is a value that can
+  be stored and re-used, which is probably not practical.
+
+- functions don't do side-effects themselves, but return a list
+  if actions to run.
+
+Haskell takes the latter approach.
+
+Why is Haskell hard?
+  
+  The interactive interpreter can evaluate expressions but you can't
+  define types with it, which might lead you to believe you're getting
+  the syntax wrong when actually you just need to put it in a file and
+  compile it non-interactively.  e.g.
+
+    Prelude> type CoolAliasForInt = Int
+
+    <interactive>:1:0: parse error on input `type'
+  
+  how can you do anything if functions have no side-effects?
+  
+    Functions don't have side-effects (except for special cases like 'debug')
+    but actions can.  'IO a' is the type for an action that returns an a.  Actions that
+    don't return anything are of type 'IO ()'
+  
+  do notation
+
+    do
+      some action
+      some other action
+      some third action
+  
+  means an action that does those 3 actions in order, and is syntactic sugar for
+  
+    some action >> some other action >> some third action
+
+  (>>) is the 'action that runs the action on the left, then the one on the right' operator
+  
+  How can actions take parameters?
+  
+  They don't.  So how can you print anything?  Wouldn't the thing to be printed be a parameter?
+  
+  Yes, but it is a parameter to the function that returns the action, not to the action itself.
+  The action is to print a specific string.  So 'putStrLn' is a function that takes a thing to
+  print, and returns an action that will do the actual printing when it's run.
+  
+  So then how can a program make decisions at runtime if actions can't take parameters?
+  
+  Actions can call functions!
+  
+  The >>= operator takes an action with some return value and a function which accepts that
+  value as an argument and returns a new action.  So
+  
+    getLine >>= (\line -> putStrLn line)
+
+  is an action that runs the 'getLine' action, then takes the return value and passes it
+  to putStrLn to create the next action, then runs that.
+ 
+    do
+      line <- getLine
+      putStrLn line
+
+  is syntactic sugar for the same thing.
+
+  Types are not values
+    
+    -- doesn't work:
+    D00D = String
+    
+    -- will work:
+    type D00D = String
+  
+  What is that double arrow thing?
+
+  It's a way to specify type constraints.
+ 
+    SomeClass x => x
+  
+  means any type 'x' (the thing on the right) such that x is an
+  instance of the SomeClass class.  (classes are a bit like interfaces
+  in Java).
+
+Haskell makes certain design patterns really really easy.
+
+  e.g. the 'figure out what to do, then do it' pattern (that's how IO works in Haskell)
+  
+  or the state machine pattern (actions act like state machines)
