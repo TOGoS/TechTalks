@@ -1,0 +1,55 @@
+What's up with Haskell?
+
+
+Features:
+
+- Pure functions
+  - No side-effects
+  - No reliance on environment
+  - Therefore they are 'referentially transparent'
+    - The same expression anywhere in the program will have the same result
+    - You can freely replace function calls with their return values,
+      which the compiler can take advantage of
+
+- Non-strict
+  - Inner expressions are not necessarily evaluated before outer ones
+  - This is possible due to referrential transparency
+  - And this allows things like infinite lists
+
+- Algebraic data types
+  - like typed unions, an object can be one of several different structures
+
+  data TreeNode = Leaf String | Branch TreeNode TreeNode
+
+- Pattern matching
+  - functions can be written with values as part of the signature
+
+  foo :: [String] -> String
+  foo [] = ""
+  foo x : [] = x
+  foo x : tail = x ++ " and " ++ (foo tail)
+
+
+If everything's a pure function, how do you DO anything?
+
+- Haskell programs return [what I call] an "action".
+- Anything that interacts with the world (reading or writing) is an action
+- Actions have something to do with something called 'monads', but don't worry about monads.
+  If you try to google for what is a monad you'll probably just get confused.
+  So just think of these as actions.
+- The action type is spelled "IO x" in Haskell, where x is the type
+  that an action returns.
+  - the getLine action, which reads a line from standard input, is typed
+    'IO String'
+  - the (putStrLn x) function returns an action of type
+    'IO ()', since it does not produce a meaningful result.
+  - Note the distinction between putStrLn (the function), and the action it produces.
+    The function does not /do/ anything itself; it just returns an action.
+
+
+In Haskell, these 'actions' have type (IO x),
+where x is the type of the action's return value.
+
+What's up with Monads?
+
+What's with those funny operators?
