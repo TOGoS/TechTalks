@@ -354,6 +354,11 @@ main = putStrLn $ appendStuff "Mockey Mouse"
 Due to its purely functional nature, expressions in Haskell are
 'referentially transparent'.  This means that you or the compiler
 may freely replace function calls with the result of the function
+without changing the functional behavior of the program.
+
+Taking advantage of this fact, Haskell interpreters/compilers
+can decide not to actually evaluate some expressions until
+their results are really needed.
 
 
 ## GHCI
