@@ -360,6 +360,36 @@ Taking advantage of this fact, Haskell interpreters/compilers
 can decide not to actually evaluate some expressions until
 their results are really needed.
 
+This allows us to do things like create giant trees full of numbers
+without having to actually instantiate the whole thing:
+
+```haskell
+data NumTree = Leaf Integer | Branch { a :: NumTree, b :: NumTree }
+
+bigLazyNumTree :: Integer -> Integer -> NumTree
+bigLazyNumTree min max
+  | min == max = Leaf min
+  | otherwise = Branch
+             (bigLazyNumTree min (min + (((max+1)-min)`quot`2) - 1))
+             (bigLazyNumTree (min + (((max+1)-min)`quot`2)) max)
+
+instance Show NumTree where
+  show (Leaf n) = show n
+  show (Branch a b) = "(" ++ (show a) ++ " " ++ (show b) ++ ")"
+
+-- Define a really huge one with a billion reccords:
+bnt = bigLazyNumTree 0 (1024*1024*1024)
+
+composeRepeat :: Integer -> (a -> a) -> (a -> a)
+composeRepeat n f
+  | n == 1 = f
+  | otherwise = f . (composeRepeat (n-1) f)
+
+-- traverse down into the tree to only show a little piece of it.
+-- the rest of the tree will never be calculated!
+main = putStrLn $ show $ a $ composeRepeat 23 b $ bnt
+```
+
 
 ## GHCI
 
