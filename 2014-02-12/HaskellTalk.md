@@ -50,6 +50,14 @@ main :: IO ()
 main = putStrLn "Hello, world!"
 ```
 
+That actions and functions are separate but that functions can return
+actions and actions can use functions was the biggest conceptual hurdle
+I had to overcome when learning the language.  It doesn't help that
+tutorials on the subject tend to make things a lot more complicated
+than they have to by attempting to describe ```IO ()``` as something
+to do with monads, which have something to do with category theory.
+You don't need to know any of that stuff to write Haskell programs.
+
 #### Operators
 
 Next I will talk about some of Haskell's operators that make Haskell
@@ -103,7 +111,7 @@ main =
   (\l -> putStrLn l)
 ```
 
-Where (\l -> ...) defines an anonymous function that takes 'l' and passes it to putStrLn.
+Where ```(\l -> ...)``` defines an anonymous function that takes 'l' and passes it to putStrLn.
 Some people say the 'do' notation is harmful because it obscures this, and
 at this point feel like I agree with that sentiment.
 
@@ -158,7 +166,7 @@ Infix operators are automatically curried, too, so you can do things like:
 (/ 3) 12
 ```
 
-Given that ++ is the string (also list) concatenation operator,
+Given that ```++``` is the string (also list) concatenation operator,
 you could make a greeting generator function like this:
 
 ```haskell
@@ -189,7 +197,7 @@ That might not seem particularly useful in cases where we immediatly call
 the functions, but it's a nice shorthand when we want to define a function for
 use later.
 
-As a somehwat contrived example, let's say we want to extend our greet function
+As a somewhat contrived example, let's say we want to extend our greet function
 so that it adds an exclamation point on the end.  One way to do it would be to
 use a named argument like this:
 
@@ -197,7 +205,7 @@ use a named argument like this:
 greet name = "Hello, " ++ name ++ "!"
 ```
 
-Or:
+Or equivalently:
 
 ```haskell
 greet = (\name -> "Hello, " ++ name ++ "!")
@@ -216,22 +224,162 @@ greet "Fred"
 < "Hello, Fred!"
 ```
 
-#### Data structures
+Here's another operator that I had a hard time with:
 
-TODO
+```haskell
+=>
+```
+
+This operator is used in type expressions and means 'the type on the right, given the constraints on the right'.
+
+I can't really give any good examples without explaining the type system, first.
+
+#### Simple data structures
+
+Haskell makes it really easy to define struct-like things with the ```data``` statement:
+
+```haskell
+data Person = Person { personName :: String, personFavoriteInteger :: Integer }
+```
+
+This is shorthand for
+
+```haskell
+data Person = Person String Integer
+```
+
+and then definig ```personName``` and ```personFavoriteInteger``` functions separately.
+
+We can also define union types pretty easily:
+
+```haskell
+data AirOrWater = Air | Water
+```
+
+This declares that something of type ```AirOrWater``` is either an ```Air``` or a ```Water```.
+
+We can define structures that contain values of arbitrary other types:
+
+```haskell
+data TreeNode t = Leaf t | Branch (TreeNode t) (TreeNode t)
+```
+
+Now when we declare a value to be of a ```TreeNode```, we need to give the type an argument, such as ```String```:
+
+```haskell
+coolTree :: TreeNode String
+coolTree = Branch (Leaf "hi") (Branch (Leaf "bye") (Leaf "wat"))
+```
 
 #### Pattern matching
 
-TODO
+There area couple ways to define a function that operates differently
+depending on what the input is:
+
+- declare the acceptable values right in the signature
+- use guards
+
+```haskell
+fib :: Integer -> Integer
+fib 0 = 0
+fib 1 = 1
+fib n = fib (n - 1) + fib (n - 2)
+```
+
+Guards are not quite as concise but are more flexible because you can
+do checks that aren't available from the pattern-matching syntax:
+
+```haskell
+fib :: Integer -> Integer
+fib n
+  | n == 0 = 0
+  | n == 1 = 1
+  | otherwise = fib (n - 1) + fib (n - 2)
+```
+
+#### Type classes
+
+A level of abstraction above types are 'type classes'.
+
+A 'type class' is like an interface in Java-like languages
+(C#, PHP, etc).  One important type class is ```Show```, which is implemented by anything that
+can be turned into a string.  To do this we write an ```instance``` statement.  Here we'll
+define how the ```show``` function works (to implement the ```Show``` class) for our AirOrWater
+type:
+
+```haskell
+instance Show AirOrWater where
+  show Air = "air"
+  show Water = "water"
+```
+
+Using ```instance``` and the ```=>``` operator we can implement ```Show``` for
+instance of our Tree type that contain Show-able data.  Here's the complete program:
+
+```haskell
+-- Define our TreeNode type:
+data TreeNode t = Leaf t | Branch (TreeNode t) (TreeNode t)
+
+-- Show should be implemented for all TreeNode t where
+-- t itself implements Show:
+instance (Show t) => Show (TreeNode t) where
+  show (Leaf s) = show s
+  show (Branch l1 l2) = "(" ++ (show l1) ++ " " ++ (show l2) ++ ")"
+
+-- Define a tree of Strings
+coolTree :: TreeNode String
+coolTree = Branch (Leaf "hi") (Branch (Leaf "bye") (Leaf "wat"))
+
+-- Print them
+main :: IO ()
+main = putStrLn (show coolTree)
+```
+
+#### Aliasing types
+
+You can alias types by using ```type``` statements:
+
+```haskell
+type StringToStringConverter = String -> String
+
+appendStuff :: StringToStringConverter
+appendStuff = (++ " and stuff")
+
+main :: IO ()
+main = putStrLn $ appendStuff "Mockey Mouse"
+```
 
 #### Lazy evaluation
 
-TODO
+Due to its purely functional nature, expressions in Haskell are
+'referentially transparent'.  This means that you or the compiler
+may freely replace function calls with the result of the function
 
-## Things to watch out for
+
+## GHCI
 
 The first hurdle I had to overcome when learning Haskell was that
-you have to define things slightly differently in ghci
+you have to define things slightly differently in ```ghci``` than
+in your actual source code.  You can't just copy-paste between them
+like you can in many other languages with interactive interpreters.
+
+For instance, to define something with a name, you need to say ```let```,
+as in:
+
+```haskell
+let greeting = "Hello there, "
+let greet name = greeting ++ name ++ "!"
+greet "Nancy"
+```
+
+It's difficult to play around with types in the interactive interpreter
+because you can't declare things before they're defined.  You can sort
+of do it by including types in your definitions and making sure
+they still compile:
+
+```haskell
+let addTen = (+ 10) :: Integer -> Integer
+```
 
 ## What do I think of it?
 
