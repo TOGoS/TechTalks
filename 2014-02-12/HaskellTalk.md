@@ -230,7 +230,7 @@ Here's another operator that I had a hard time with:
 =>
 ```
 
-This operator is used in type expressions and means 'the type on the right, given the constraints on the right'.
+This operator is used in type expressions and means 'the type on the right, given the constraints on the left'.
 
 I can't really give any good examples without explaining the type system, first.
 
