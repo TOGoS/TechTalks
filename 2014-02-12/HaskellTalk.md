@@ -361,7 +361,7 @@ can decide not to actually evaluate some expressions until
 their results are really needed.
 
 This allows us to do things like create giant trees full of numbers
-without having to actually instantiate the whole thing:
+without the entire thing actually taking up space in memory:
 
 ```haskell
 data NumTree = Leaf Integer | Branch { a :: NumTree, b :: NumTree }
@@ -377,7 +377,7 @@ instance Show NumTree where
   show (Leaf n) = show n
   show (Branch a b) = "(" ++ (show a) ++ " " ++ (show b) ++ ")"
 
--- Define a really huge one with a billion reccords:
+-- Define a really huge one with over billion nodes:
 bnt = bigLazyNumTree 0 (1024*1024*1024)
 
 composeRepeat :: Integer -> (a -> a) -> (a -> a)
