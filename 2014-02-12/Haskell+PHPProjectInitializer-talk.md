@@ -21,24 +21,35 @@
     - Data structures are immutable
     - Expressions are referrentially transparent
   - Effects:
-    - More predictable because there all variables need to be explicitly declared and handled
+    - More predictable because all variables need to be explicitly declared and handled
     - Compiler can more easily optimize because it has all information
       at hand and does not need to guarantee evaluation order
     - Interacting with the outside world requires something other than functions
-- Actions, a.k.a. Monads
+- Currying:
+  - No such thing as a zero-argument function
+  - Makes things like ```(+ 1) 2``` possible
+- Actions (a.k.a. Monads)
+  - The part of a Haskell program that _actually do stuff_, since functions can't.
+  - ```main``` is an action
   - Separate from functions
   - Actions can call functions and functions can return actions
-    but functions cannot execute actions
-  - 'main' is an action
-  - ```>>``` and ```>>=```
-  - mention ```do``` notation
+    - but functions cannot execute actions
+    - and actions do not take arguments
+    - ```putStrLn``` is a function that returns an action;
+      by itself, putStrLn does nothing, and even the action
+      it returns does not do anything until it is executed
+  - Combine actions with ```>>``` and ```>>=```, or ```do```.
 
 Strict separation of pure/impure world is good idea.
 Move as much logic as possible into the pure world.
 
-## The new PHP framework
+I like that even though Haskell cleanly separates the pure and impure
+parts of a program, programs are still very concise.
 
-Since we're all sick of Kohana,
+
+## PHP Project Initializer
+
+Since we're all sick of Kohana and I was lacking billable work to do,
 Pitt had me come up with recommendations for a new
 foundation for new PHP projects, which I have made.
 
@@ -47,13 +58,13 @@ This new foundation consists of:
 - a folder structure
 - a dependency manager (Composer)
 - a bootstrap script
-- a program to initialize a new project
+- a program to initialize a new project (PHP Project Initializer)
 
 It is intentionally non-prescriptive because we can't know right now
 what the best tools for a given project at some point in the future will be.
 
-PHPProjectInitializer can be updated as we discover what libraries
-work and which don't, possibly adding options for initializing
+PHP Project Initializer can be updated as we discover what libraries
+are helpful and which aren't, possibly adding options for initializing
 different kinds of projects (e.g. to leave out everything related to
 database connections if an application doesn't need any)
 
