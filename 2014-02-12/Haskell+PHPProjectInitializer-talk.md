@@ -76,11 +76,12 @@ Notes:
   - Compile static files directly into www
   - Don't store them in the repository
 
+At this point in the talk, demonstrate setting up a new project with PPI.
 
 
 ### Composer
 
-- Very similar to NPM's ```package.json```
+- It's NPM for PHP
 - Define dependencies in ```composer.json```
 - Composer downloads and installs them for you
 - Give overview of PPI's default ```composer.json```
