@@ -391,7 +391,9 @@ main = putStrLn $ show $ a $ composeRepeat 23 b $ bnt
 ```
 
 
-## GHCI
+## Hurdles
+
+#### GHCI
 
 The first hurdle I had to overcome when learning Haskell was that
 you have to define things slightly differently in ```ghci``` than
@@ -416,6 +418,22 @@ they still compile:
 let addTen = (+ 10) :: Integer -> Integer
 ```
 
+
+#### The Multitude of String types
+
+There are Strings, but there are also Data.Text, Data.Text.Lazy,
+Data.ByteString, Data.ByteString.Lazy.
+Conversion is not automatic and figuring out how to convert e.g. a
+Text to a ByteString.Lazy, or a Text to a String, can be a real chore.
+
+I'm used to having to explicitly encode a character string to a byte
+string, but it seems like Text -> Lazy.Text should be automatic.
+
+This guy created a ToString typeclass to help him deal with
+the conversions:
+http://ujihisa.blogspot.com/2011/10/converting-fromto-string.html
+
+
 ## What do I think of it?
 
 It's a nice language, but it takes some getting used to,
@@ -437,6 +455,10 @@ And the primary disadvantages of Haskell are:
 
 - It requires re-training
 - Getting good performance in tight loops may require some tweaking
+
+To put it another way, getting your first Haskell program to compile
+is relatively difficult, but once it's written you can be pretty
+confident that it works.
 
 Since we're primarily a client-side web application shop,
 the bulk of our work is going to be HTML, CSS, and JavaScript.
