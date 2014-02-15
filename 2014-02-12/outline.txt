@@ -1,8 +1,0 @@
-
-Haskell!
-- Pure functional
-  - Emphasizes safety
-  - Emphasis on ease of composing functions
-  - Interacting with the outside world requires something other than functions
-
-Blah blah blah more stuff goes here
