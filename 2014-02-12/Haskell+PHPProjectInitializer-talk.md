@@ -58,6 +58,7 @@ This new foundation consists of:
 - a folder structure
 - a dependency manager (Composer)
 - a bootstrap script
+- some custom frameworky classes (PHPCommon)
 - a program to initialize a new project (PHP Project Initializer)
 
 It is intentionally non-prescriptive because we can't know right now
@@ -77,8 +78,30 @@ Notes:
 
 
 
-TODO: fill in these sectiosn
-
 ### Composer
 
-### Nife and the bootstrapper
+- Very similar to NPM's ```package.json```
+- Define dependencies in ```composer.json```
+- Composer downloads and installs them for you
+- Give overview of PPI's default ```composer.json```
+- We can have private repositories if we need to
+
+### PHPCommon, Nife, and bootstrap.php
+
+Custom bootstrap script based on experience with Schweser, Align projects
+
+Features:
+
+- Configuration, environment initialization scripts are separate from bootstrap.php
+  - can be re-used by e.g. command-line programs that need
+    the same class loader and/or configuration
+- No global variables other than the class loader
+  - If you need a separate version of some component, you can make it
+- All component initialization is done through a single Registry object
+- All web requests are handled through a single Dispatcher object
+  - All dispatching logic in one place with very easy-to-follow code.
+  - An improvement over the Kohana approach of scattering it through
+    various source files (bootstrap, dispatcher, request, controller)!
+- Response is encapsulated in a Response object
+  - Can write unit tests for your controllers
+  - Response can be produced lazily
