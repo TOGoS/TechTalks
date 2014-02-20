@@ -70,17 +70,20 @@ Motivation
 Kohana et al give you a monolithic library that's supposed to do everything.
 
 Problem is that they don't do everything and we invariably end up
-spending more time working around their limitations half the time than
-you saved by using them.
+spending more time working around their limitations than
+we saved by using them.
 
-It also means there's a lot of code in your application that's not
-being used, and even the code that is being used most people don't
+It also results in having large swaths of your codebase
+that nobody knows that it's there for.
+
+Even the code that is being used most people don't
 completely understand what it does or why it's written the way it is.
 They just use it because they think they're supposed to.
+This leaves lots of potential for misunderstanding which leads to
+bugs and inefficiencies (both in writing and running the code)
 
-We keep using them because people like the feeling of having some
-foundation to build off of, even if that foundation is made of sugar
-cubes.
+But people like the feeling of having somefoundation to build off of,
+even if that foundation is made of sugar cubes.  So we keep using this stuff.
 
 Therefore I spent some more idle time
 (with encouragement from Pitt and Josh)
