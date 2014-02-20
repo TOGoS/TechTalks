@@ -25,9 +25,10 @@ Features
 
 - Pure functional
   - Meaning:
-    - Functions cannot have side-effects
+    - Functions, by definition, do not have side-effects, and given the same inputs,
+      will always return the same value 
     - Data structures are immutable
-    - Expressions are referrentially transparent
+    - Expressions are 'referrentially transparent'
   - Effects:
     - More predictable because all variables need to be explicitly declared and handled
     - Compiler can more easily optimize because it has all information
