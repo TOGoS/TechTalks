@@ -1,23 +1,31 @@
 # Dan's Tech Talk for 2014-02-19
 
+I'm going to talk about a couple of things.
+Haskell because I think it's interesting.
+A system for setting up new PHP projects.
+
+Best time to ask questions is when you have them.
+
 ## Haskell
 
-- Why is it called "Haskell"?
-  - It's named after Hakell Brooks Curry
-  - Brooks and Curry are also named after him,
-    and so is the concept of currying (transforming a multi-argument
-    function into one that can be called as a chain of functions, each
-    taking a single argument, which Haskell does)
-- Why talk about Haskell?
-  - Ability to write concise code
-  - Ability to write efficient code
-  - Strict typing and pure functions make code more self-explanatory and
-    prevent many errors before they occur
-    (Haskell enforces some of the patterns I talked about in my last talk)
+(Write a hello world program)
+
+Given some idle time I decided to learn it because...
+
+- very different than what I'm used to
+- safe (compiler will catch most errors before they happen)
+- concise syntax that makes certain kinds of operations really easy on the fingers and eyes
+  that tend to require a lot more typing in imperative languages
+  or even in functionalish OO languages like Ruby or Scala
+- most popular (and therefore well-supported) of statically typed functional languages
+  - Erlang being a popular dynamically typed one
+  - but I like static typing
+
+Features
+
 - Pure functional
   - Meaning:
     - Functions cannot have side-effects
-    - Names cannot be re-bound
     - Data structures are immutable
     - Expressions are referrentially transparent
   - Effects:
@@ -34,32 +42,71 @@
   - Separate from functions
   - Actions can call functions and functions can return actions
     - but functions cannot execute actions
-    - and actions do not take arguments
+    - and actions do not take arguments (like Runnables in Java)
     - ```putStrLn``` is a function that returns an action;
       by itself, putStrLn does nothing, and even the action
       it returns does not do anything until it is executed
   - Combine actions with ```>>``` and ```>>=```, or ```do```.
+    (kind of like ```.then(...)``` when using promisey JavaScript)
 
-Strict separation of pure/impure world is good idea.
+Strict separation of pure/impure world is good idea
+because it makes the behavior of the program better defined
+and reduces the number of things that can go wrong.
 Move as much logic as possible into the pure world.
 
 I like that even though Haskell cleanly separates the pure and impure
 parts of a program, programs are still very concise.
 
+Pitt may ask 'Why is it called "Haskell"?'
+- It's named after Hakell Brooks Curry
+- Brooks and Curry are also named after him,
+  and so is the concept of currying
+
 
 ## PHP Project Initializer
 
-Since we're all sick of Kohana and I was lacking billable work to do,
-Pitt had me come up with recommendations for a new
-foundation for new PHP projects, which I have made.
+Motivation
 
-This new foundation consists of:
+Kohana et al give you a monolithic library that's supposed to do everything.
+
+Problem is that they don't do everything and we invariably end up
+spending more time working around their limitations half the time than
+you saved by using them.
+
+It also means there's a lot of code in your application that's not
+being used, and even the code that is being used most people don't
+completely understand what it does or why it's written the way it is.
+They just use it because they think they're supposed to.
+
+We keep using them because people like the feeling of having some
+foundation to build off of, even if that foundation is made of sugar
+cubes.
+
+Therefore I spent some more idle time
+(with encouragement from Pitt and Josh)
+to come up with something to start with that:
+
+- does more of what we need out-of-the-box
+- stays out of your way when you want to do something different
+  (this is accomplished by not overcomplicating things that should be
+  simple, like loading configuration files or dispatching requests based
+  on URLs or any other parameter)
+- is broken into cohesive modules such that you can avoid having the
+  pieces that you don't use cluttering up your repository
+- can be updated over time as we discover new 'best pratcices'
+
+Rather than write another framework, I've written a program that sets
+up a new project following a standard layout and uses Composer to
+include a bunch of libraries.
+
+(demonstrate setting up a project)
+
+So what do we have here...
 
 - a folder structure
 - a dependency manager (Composer)
 - a bootstrap script
-- some custom frameworky classes (PHPCommon)
-- a program to initialize a new project (PHP Project Initializer)
+- several custom libraries (EarthIT/PHP*)
 
 It is intentionally non-prescriptive because we can't know right now
 what the best tools for a given project at some point in the future will be.
@@ -76,16 +123,6 @@ Notes:
   - Compile static files directly into www
   - Don't store them in the repository
 
-At this point in the talk, demonstrate setting up a new project with PPI.
-
-
-### Composer
-
-- It's NPM for PHP
-- Define dependencies in ```composer.json```
-- Composer downloads and installs them for you
-- Give overview of PPI's default ```composer.json```
-- We can have private repositories if we need to
 
 ### PHPCommon, Nife, and bootstrap.php
 
@@ -106,3 +143,33 @@ Features:
 - Response is encapsulated in a Response object
   - Can write unit tests for your controllers
   - Response can be produced lazily
+
+### REST API
+
+Defined in PHPCMIPREST README.
+
+Talk about Composer
+Talk about Doctrine
+Talk about Postgres
+
+### Composer
+
+- It's NPM for PHP
+- Define dependencies in ```composer.json```
+- Composer downloads and installs them for you
+- Give overview of PPI's default ```composer.json```
+- We can have private repositories if we need to
+
+### Doctrine
+
+- Some random database abstraction layer I picked out
+- Turning out not to be all that useful
+  - can't use identifiers as parameters
+  - no notion of last_insert_id???
+  - no upsert support
+
+### Postgres
+
+- Sequences are way handier than AUTO_INCREMENT
+- Can INSERT ... RETURNING
+- Upserts are a bit more verbose than in MySQL but can still be done in a single query
