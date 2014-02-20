@@ -1,8 +1,8 @@
 # Dan's Tech Talk for 2014-02-19
 
 I'm going to talk about a couple of things.
-Haskell because I think it's interesting.
-A system for setting up new PHP projects.
+Haskell because I think it's interesting,
+and a system for setting up new PHP projects because I want you to use it.
 
 Best time to ask questions is when you have them.
 
