@@ -83,7 +83,7 @@ They just use it because they think they're supposed to.
 This leaves lots of potential for misunderstanding which leads to
 bugs and inefficiencies (both in writing and running the code)
 
-But people like the feeling of having somefoundation to build off of,
+But people like the feeling of having some foundation to build off of,
 even if that foundation is made of sugar cubes.  So we keep using this stuff.
 
 Therefore I spent some more idle time
@@ -97,11 +97,11 @@ to come up with something to start with that:
   on URLs or any other parameter)
 - is broken into cohesive modules such that you can avoid having the
   pieces that you don't use cluttering up your repository
-- can be updated over time as we discover new 'best pratcices'
+- can be updated over time as we discover new 'best practices'
 
-Rather than write another framework, I've written a program that sets
-up a new project following a standard layout and uses Composer to
-include a bunch of libraries.
+Rather than write yet another monolithic framework thingy,
+I've written a program that sets up a new project following a standard layout
+and uses Composer to include a bunch of libraries.
 
 (demonstrate setting up a project)
 
@@ -109,7 +109,7 @@ So what do we have here...
 
 - a folder structure
 - a dependency manager (Composer)
-- a bootstrap script
+- a web request service bootstrap script (bootstraph.php)
 - several custom libraries (EarthIT/PHP*)
 
 It is intentionally non-prescriptive because we can't know right now
@@ -152,9 +152,9 @@ Features:
 
 Defined in PHPCMIPREST README.
 
-Talk about Composer
-Talk about Doctrine
-Talk about Postgres
+(Talk about Composer)
+(Talk about Doctrine)
+(Talk about Postgres)
 
 ### Composer
 
