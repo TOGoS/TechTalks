@@ -109,7 +109,7 @@ So what do we have here...
 
 - a folder structure
 - a dependency manager (Composer)
-- a web request service bootstrap script (bootstraph.php)
+- a web request handler bootstrap script (bootstrap.php)
 - several custom libraries (EarthIT/PHP*)
 
 It is intentionally non-prescriptive because we can't know right now
